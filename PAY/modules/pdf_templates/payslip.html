@@ -1,0 +1,125 @@
+<div style="font-family:Arial, sans-serif; font-size:12px; color:#111;">
+    <table style="width:100%; border-collapse:collapse; margin-bottom:10px;">
+        <tr>
+            <td style="width:120px;">
+                <img src="{{company_logo_url}}" alt="Logo" style="max-width:100px; max-height:60px;">
+            </td>
+            <td style="text-align:right;">
+                <div style="font-weight:bold; font-size:16px;">{{company_name}}</div>
+                <div>{{company_address}}</div>
+                <div>{{company_contact}}</div>
+            </td>
+        </tr>
+    </table>
+
+    <div style="border-top:1px solid #999; border-bottom:1px solid #999; padding:6px 0; margin-bottom:10px;">
+        <div style="font-weight:bold;">Payslip for {{payslip_month_label}}</div>
+        <div>Pay Period: {{period_start}} to {{period_end}}</div>
+    </div>
+
+    <table style="width:100%; border-collapse:collapse; margin-bottom:10px;">
+        <tr>
+            <td style="width:60%;">
+                <div>Employee Name: <strong>{{emp_name}}</strong></div>
+                <div>Department: <strong>{{dept_name}}</strong></div>
+                <div>Position: <strong>{{position_name}}</strong></div>
+            </td>
+            <td style="text-align:right;">
+                <div>Employee ID: <strong>{{emp_id}}</strong></div>
+                <div>Pay Date: <strong>{{pay_date}}</strong></div>
+            </td>
+        </tr>
+    </table>
+
+    <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+        <thead>
+            <tr>
+                <th style="text-align:left; background:#f3f4f6; padding:6px; border:1px solid #ddd;">Earnings</th>
+                <th style="text-align:right; background:#f3f4f6; padding:6px; border:1px solid #ddd;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd;">Basic Salary</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd;">₱{{basic_pay}}</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd;">Transportation/Other Allowances</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd;">₱{{allowances}}</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd;">Overtime Pay</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd;">₱{{ot_pay}}</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd; font-weight:bold;">Gross Pay</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd; font-weight:bold;">₱{{gross_pay}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+        <thead>
+            <tr>
+                <th style="text-align:left; background:#f3f4f6; padding:6px; border:1px solid #ddd;">Deductions</th>
+                <th style="text-align:right; background:#f3f4f6; padding:6px; border:1px solid #ddd;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd;">Tax</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd;">₱{{tax}}</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd;">SSS</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd;">₱{{sss}}</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd;">PhilHealth</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd;">₱{{philhealth}}</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd;">Pag-IBIG</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd;">₱{{pag_ibig}}</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd;">Other Deductions</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd;">₱{{other_deductions}}</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; border:1px solid #ddd; font-weight:bold;">Total Deductions</td>
+                <td style="text-align:right; padding:6px; border:1px solid #ddd; font-weight:bold;">₱{{total_deduction}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div
+        style="padding:8px; border:1px solid #ddd; background:#f9fafb; font-size:14px; font-weight:bold; margin-bottom:10px;">
+        Net Pay: ₱{{net_pay}}
+    </div>
+
+    <div style="margin-bottom:10px;">
+        <div style="font-weight:bold; margin-bottom:4px;">Remarks</div>
+        <div style="white-space:pre-wrap; border:1px solid #ddd; padding:6px;">{{remarks}}</div>
+    </div>
+
+    <table style="width:100%; border-collapse:collapse; margin-top:12px;">
+        <tr>
+            <td style="width:33%; text-align:center;">
+                <img src="{{prepared_sig_url}}" alt="Prepared"
+                    style="max-height:50px; display:block; margin:0 auto 4px;">
+                <div>Prepared By: {{prepared_by_name}}</div>
+            </td>
+            <td style="width:33%; text-align:center;">
+                <img src="{{checked_sig_url}}" alt="Checked" style="max-height:50px; display:block; margin:0 auto 4px;">
+                <div>Checked By: {{checked_by_name}}</div>
+            </td>
+            <td style="width:33%; text-align:center;">
+                <img src="{{approved_sig_url}}" alt="Approved"
+                    style="max-height:50px; display:block; margin:0 auto 4px;">
+                <div>Approved By: {{approved_by_name}}</div>
+            </td>
+        </tr>
+    </table>
+</div>

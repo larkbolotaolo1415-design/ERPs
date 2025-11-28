@@ -1,0 +1,218 @@
+/* ===== General Styles ===== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f6f9;
+  margin: 0;
+  color: #333;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  height: 100vh;
+  width: 230px;
+  position: fixed;
+  background-color: #0a2a66;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+
+.sidebar .nav-link {
+  color: white;
+  font-weight: 500;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: background 0.3s;
+  text-decoration: none;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: #123a8c;
+}
+
+.sidebar .nav-link i {
+  font-size: 18px;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  margin-left: 230px;
+  background-color: #fff;
+  padding: 15px 30px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar h6 {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== Main Content ===== */
+.content {
+  margin-left: 230px;
+  padding: 30px;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 20px 30px;
+  position: relative;
+}
+
+.profile-card .icons {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
+.profile-card .icons i {
+  font-size: 20px;
+  margin-left: 15px;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.profile-card .icons i:hover {
+  color: #0a2a66;
+}
+
+/* ===== Employee Header ===== */
+.employee-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 3px solid #0a2a66;
+  padding-bottom: 10px;
+}
+
+.employee-header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.employee-header h5 {
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ===== Card Section ===== */
+.card-section {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card-box {
+  flex: 1;
+  min-width: 300px;
+  background: #f8f9fc;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.card-box h6 {
+  text-align: center;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #0a2a66;
+}
+
+.card-box p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.card-box strong {
+  color: #222;
+}
+
+/* ===== Modal Customization ===== */
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-title {
+  font-weight: 600;
+}
+
+.modal-content {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.nav-tabs .nav-link {
+  font-weight: 500;
+  color: #0a2a66;
+  border-radius: 0;
+  border: none;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #0a2a66;
+  color: #fff;
+}
+
+.nav-tabs {
+  border-bottom: 2px solid #0a2a66;
+}
+
+.modal-body {
+  padding: 25px;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  transition: all 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0a2a66;
+  box-shadow: 0 0 4px rgba(10, 42, 102, 0.3);
+}
+
+.modal-footer {
+  border-top: 1px solid #e0e0e0;
+  padding: 15px 25px;
+}
+
+.btn-primary {
+  background-color: #0a2a66;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 20px;
+}
+
+.btn-primary:hover {
+  background-color: #123a8c;
+}
+
+.btn-secondary {
+  border-radius: 10px;
+}

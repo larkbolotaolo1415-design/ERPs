@@ -1,0 +1,134 @@
+ ===================================================================================================================
+    Payroll and Computation
+    ===================================================================================================================
+    
+    On the Payroll Officer webpage-Payroll and Computation; Steps in generating payroll for each employees.
+
+        1. Choose a payroll period
+        2. Click on Compute/Recompute
+        3. Then the following algorithm will be followed through: (Refer to the info below)
+
+    ===================================================================================================================
+    Period Selection and Eligible Employees
+    ===================================================================================================================
+    
+    Get Payroll Period 
+    Choose Payroll period with status open
+    Get all employees from users_table where status == active
+
+    ===================================================================================================================
+    Attendance Compputation
+    ===================================================================================================================
+
+    Get all attendance
+    Get total_hours
+    Get days_worked
+
+    ===================================================================================================================
+    Leave Requests
+    ===================================================================================================================
+
+    Get all the unpaid and approved leave requests of the employees first
+    Afterwards, 
+
+    =============== attendance (cont.) ===============
+
+    Get all the leave requests that is approved and unpaid
+    Sum all of the leave requests and minus it to the total_working_days
+
+    Where date period between period_start and period_end
+    Compute: daily_rate = basic_pay / total_working_days
+    Compute: hourly_rate = basic_pay / total_working_hours
+    Compute: Late_absent_deductions = (daily_rate) * (absent_days) 
+
+    ===================================================================================================================
+    Overtime Computation
+    ===================================================================================================================
+
+    Get all overtime_requests where period_in_database == period_entered
+    get total_overtime_pay
+    get OT_rate [sample ot_rate = 1.25] - Possible din na manggaling sa computed formula yung ot_rate, still depends.
+    Compute: ot_pay = (hourly_rate) * (overtime_hours) * 1.25
+    1.25 is a multiplier (kung meron)
+    TODO: Maglagay ng multiplier editor sa company settings ng admin.
+
+    ===================================================================================================================
+    Benefits Computation and Gross Pay
+    ===================================================================================================================
+
+    Get all salary_benefits 
+    Connections
+    salary_beneayrollfits: salary_strucutre -> benefit_id
+    
+    sum all allowances of every employees: allowances = {benefit_amounts}
+
+    Compute: gross_pay = basic_pay + ot_pay + allowances
+
+    ===================================================================================================================
+    Deduction Computation
+    ===================================================================================================================
+
+    Get all default deductions
+    1. SSS
+    2. PhilHealth
+    3. Pag-Ibig
+    4. Tax
+        They will be computed in PHP based on their formulas column...
+
+    Get other deductions
+    Also computer their formula, but cannot use variables
+    TODO: Remove the variables in the deductions' formula builder...
+
+    ===================================================================================================================
+    Net Pay Computation
+    ===================================================================================================================
+
+    Compute: net_pay = gross_pay - total_deduction
+
+    ===================================================================================================================
+    Payroll insertion
+    ===================================================================================================================
+
+    Insert into payroll table
+
+    INSERT INTO payroll (
+    emp_id, dept_id, pos_id, basic_pay,
+    days_worked, ot_hours, ot_pay, allowances,
+    gross_pay, late_absent_deductions,
+    sss, philhealth, pag_ibig, tax, other_deductions,
+    total_deduction, net_pay, payroll_status, payroll_period_id
+    )
+    VALUES (..., 'pending', ?);
+
+    ===================================================================================================================
+    Payroll and Computation (cont.)
+    ===================================================================================================================
+
+        3. After computation, the table will be shown. All the employees are checked and eligible for payroll generation until the admin unchecks them. Their current statuses are pending, until approved.
+        4. After double-checking, the admin will click on approve button. The Status will change to approved.
+        5. After approval, the admin will click on lock payroll button to disable any changes on all the payroll generated within that payroll period.
+        6. The admin can now export a csv of all the payrolls and/or distribute emails or files of pdf version of the payroll for every employees.
+        
+
+TODO: Make a Variable storage in the database.
+
+FIXED Variables - variables that are defaulty present but needs to be dynamic. This variables can't be deleted as their are the REQUIRED and defaulty present in the computation of the payroll.
+
+1. Gross Pay
+2. Net Pay
+3. Basic Pay
+4. Range From (Taxes)
+5. Range To (Taxes)
+6. Rate on Excess (Taxes)
+7. Additional Amount (Taxes)
+
+etc...
+
+NORMAL Variables - variables that are given by the admin. Can vary and are usually not required in the computation of the payroll.
+
+
+TODO: I-sama sa factors yung araw na mga walang pasok yung employee, maglagay sa database neto. Pati mga holidays and leaves.
+
+TODO: Wrong daily_rate Computation daw? - basic rate should be divided to the total working days in a month daw ata? Di kaya pwedeng i-divide nlng yung basic rate into 2 and just keep the total working days just is?
+
+TODO: if already exists and just needs recomputation just update it...

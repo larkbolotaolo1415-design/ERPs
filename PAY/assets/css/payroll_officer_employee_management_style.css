@@ -1,0 +1,170 @@
+:root {
+  --accent: #2563EB;
+  --white: #ffffff;
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: var(--white);
+}
+
+.btn-accent:hover {
+  background-color: #1d4dbf;
+  color: var(--white);
+}
+
+.btn-export {
+  border: 1.5px solid #2563EB;
+  color: #2563EB;
+  font-weight: 500;
+}
+
+.btn-export:hover {
+  background-color: #2563EB;
+  color: #ffffff;
+}
+
+.filter-section select,
+.filter-section input {
+  min-width: 150px;
+}
+
+.filter-section .btn {
+  min-width: 80px;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  vertical-align: middle;
+  text-align: center;
+  border-bottom: 2px solid #dee2e6;
+  padding: 12px 16px;
+}
+
+.table tbody td {
+  padding: 10px 16px;
+  vertical-align: middle;
+  text-align: center;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.table-actions button {
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9fafb;
+}
+
+.table th,
+.table td {
+  white-space: nowrap;
+}
+
+/* Default tab style */
+.nav-tabs .nav-link {
+  background-color: #93C5FD;
+  color: #2D3436;
+  border: none;
+  margin-right: 5px;
+  border-radius: 0.5rem 0.5rem 0 0;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+/* Active tab style */
+.nav-tabs .nav-link.active {
+  background-color: #2563EB;
+  color: #FFFFFF;
+  border: none;
+}
+
+/* Hover effect */
+.nav-tabs .nav-link:hover {
+  background-color: #60A5FA;
+  color: #FFFFFF;
+}
+
+.stats {
+  margin: 10px;
+}
+
+.stats .card {
+  background: #2563EB;
+  color: #FFFFFF;
+  flex: 1;
+  padding: 5px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.modal-profile .nav-tabs {
+  margin-bottom: 0.5rem;
+  border-bottom: none;
+}
+
+.modal-profile .nav-tabs .nav-link {
+  background-color: #93C5FD;
+  color: #2D3436;
+  border: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  padding: 6px 14px;
+  /* slightly smaller tabs */
+  margin-right: 1px;
+  /* make them sit closer together */
+}
+
+.modal-profile .nav-tabs .nav-link.active {
+  background-color: #2563EB;
+  color: #FFFFFF;
+}
+
+.modal-profile .nav-tabs .nav-link:hover {
+  background-color: #60A5FA;
+  color: #FFFFFF;
+}
+
+.table thead th {
+  color: #2563EB;
+  border-bottom: 2px solid #2563EB;
+  font-weight: 600;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #F5F6FA;
+}
+
+.badge-success {
+  background-color: #28a745 !important;
+  color: #ffffff !important;
+}
+
+.badge-warning {
+  background-color: #FFC107 !important;
+  color: #2D3436 !important;
+}
+
+.badge-danger {
+  background-color: #DC2626 !important;
+  color: #ffffff !important;
+}
+
+.card .payroll-announcement {
+  color: #2563EB;
+  justify-content: space-between;
+}

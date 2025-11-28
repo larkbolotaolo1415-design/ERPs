@@ -1,0 +1,195 @@
+:root {
+    --primary-color: #143d83;
+    --secondary-color: #2f66e0;
+    --light-bg: #f9fafc;
+}
+
+/* General */
+body {
+    background-color: var(--light-bg);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+    background: linear-gradient(180deg, var(--primary-color) 80%, #1b4fa1 100%);
+    color: white;
+    min-height: 100vh;
+    box-shadow: 2px 0 16px rgba(20, 61, 131, 0.08);
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-link {
+    color: white;
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    transition: all 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 4px solid white;
+}
+
+.nav-link i {
+    width: 24px;
+    text-align: center;
+}
+
+/* Layout */
+.main-content {
+    margin-left: 250px;
+    padding: 2rem;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+    border: none;
+}
+
+/* Top Cards */
+.role-card,
+.override-card,
+.button-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.role-card {
+    background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+    color: white;
+    text-align: center;
+}
+
+.role-card h3 {
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.override-card h6,
+.button-card h6 {
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.card-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-primary {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-action {
+    border-radius: 20px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+}
+
+/* Table */
+.table th {
+    background: #f3f6fa;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table-primary td {
+    background: #f3f6fa;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    border-radius: 20px;
+    transition: .4s;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--secondary-color);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .main-content {
+        margin-left: 0;
+    }
+
+    .card-section {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+        width: 100%;
+    }
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+}
