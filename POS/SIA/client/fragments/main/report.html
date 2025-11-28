@@ -1,0 +1,103 @@
+<section id="report">
+      <div class="report__title">
+            <span> REPORTS </span>
+      </div>
+
+
+      <!-- REPORT CONTENT -->
+
+      <div class="report__tab">
+            <div class="report__tab-item ---active">
+                <span> Sales Report </span>
+            </div>
+            <div class="report__tab-item">
+                <span> Invoice </span>
+            </div>
+         
+      </div>
+
+      
+
+      <div class="report__content__flex">
+                
+                <table class="report__list-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice ID</th>
+                            <th>Invoice Number</th>
+                            <th>Patient ID</th>
+                            <th>Walkin ID</th>
+                            <th>Employee ID </th>
+                            <th>Subtotal</th>
+                            <th>Discount Type</th>
+                            <th>Discount Amount</th>
+                            <th>Tax Amount</th>
+                            <th>Total Amount</th>
+                            <th>Payment Method</th>
+                            <th>Date Created</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceListTableBody">
+                        <tr>
+                            <td colspan="3" style="text-align: center; padding: 2rem;">Loading invoices...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</section>
+
+<!-- EDIT MODAL -->
+<div class="theme__modal-container" id="editModalContainer">
+    <div class="theme__modal">
+        <div class="theme__modal-header">
+            <h3>Edit Report</h3>
+            <button id="closeEditModalBtn">&times;</button>
+        </div>
+        
+        <div id="editableReportContainer">
+            <!-- Editable report will be cloned here -->
+        </div>
+        
+        <div class="theme__modal-action">
+            <button id="cancelEditModalBtn" class="theme__button">
+                Cancel
+            </button>
+            <button id="saveEditModalBtn" class="theme__button --primary">
+                Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- VIEW MODAL -->
+<div class="theme__modal-container" id="viewModalContainer">
+    <div class="theme__modal">
+        <!-- Main Report Content -->
+        <div id="viewReportPane">
+            <button id="closeViewModalBtn">&times;</button>
+            <div id="viewReportContainer">
+                
+                <!-- Rendered report view will be injected here -->
+            </div>
+        </div>
+
+        <!-- Side Panel with Buttons -->
+        <aside id="viewModalSide">
+            <button id="viewDownloadBtn" class="theme__button --primary"> 
+                <svg height="24" width="24">
+                    <use href="client/assets/icons/main.svg#icon-download"></use>
+                </svg>
+                <span>DOWNLOAD</span>
+            </button>
+
+            <button id="viewEditBtn" class="theme__button"> 
+                <svg height="24" width="24">
+                    <use href="client/assets/icons/main.svg#icon-edit"></use>
+                </svg>
+                <span>EDIT</span>
+            </button>
+        </aside>
+    </div>
+</div>

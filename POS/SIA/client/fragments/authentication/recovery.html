@@ -1,0 +1,28 @@
+<form id="recoveryForm" class="recovery">
+    <div class="theme__textfield">
+        <svg height="28" width="28">
+            <use href="client/assets/icons/authentication.svg#icon-mail"></use>
+        </svg>
+        <input id="emailTextfield" type="email" name="email" autocomplete="email" placeholder="Email" required>
+    </div>
+
+    <section class="recovery__otp">
+        <div class="theme__textfield">
+            <svg height="28" width="28">
+                <use href="client/assets/icons/authentication.svg#icon-pin"></use>
+            </svg>
+            <input id="otpTextfield" type="text" name="otp" placeholder="OTP" maxlength="6" required>
+        </div>
+
+        <button id="otpButton" class="theme__button --secondary" type="button">
+            <svg height="28" width="28">
+                <use href="client/assets/icons/authentication.svg#icon-send"></use>
+            </svg>
+            <span>SEND</span>
+        </button>
+    </section>
+
+    <button class="theme__button --primary" type="submit">
+        <span>VERIFY</span>
+    </button>
+</form>

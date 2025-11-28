@@ -1,0 +1,120 @@
+.refund {
+    pointer-events: none;
+    opacity: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background-color: rgba(0, 0, 0, 0.5);
+
+    &, & * {
+        transition: 0.3s ease;
+    }
+
+    /* ========== [ ---STATES ] ========== */
+    &.---show {
+        pointer-events: auto;
+        opacity: 1;
+    }
+}
+
+.refund__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    background-color: var(--color-background);
+
+    width: 30rem;
+
+    padding: 2em;
+
+    border-top: 6px solid var(--color-brand);
+    border-radius: var(--radius-outer);
+}
+
+.refund__container-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.refund__container-header > * {
+    color: var(--color-brand);
+}
+
+.refund__container-header > h3 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: bold;
+
+    text-align: center;
+    text-shadow: var(--shadow-text);
+}
+
+.refund__container-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    width: 100%;
+}
+
+.refund__container-input > div.theme__textfield {
+    width: 100%;
+}
+
+.container-input__receipt {
+    pointer-events: none;
+    overflow-y: auto;
+    opacity: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    background-color: var(--color-surface);
+
+    height: 0;
+    width: 100%;
+
+    padding: 0;
+
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-inner);
+
+    /* ========== [ ---STATES ] ========== */
+    &.---show {
+        pointer-events: auto;
+        opacity: 1;
+
+        height: 10rem;
+        padding: 1em;
+    }
+}
+
+.container-input__receipt-item {
+    display: flex;
+}
+
+.container-input__receipt-item > section {
+    flex: 1;
+}
+
+.container-input__action {
+    display: flex;
+    gap: 1rem;
+}
+
+.container-input__action > button {
+    margin-top: 1rem;
+    width: 8rem;
+}

@@ -1,0 +1,54 @@
+.recommendation {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    padding: 2em;
+}
+
+.recommendation > h1 {
+    font-family: var(--font-heading);
+
+    text-shadow: var(--shadow-text);
+    letter-spacing: 3px;
+}
+
+.recommendation__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    background-color: var(--color-background);
+
+    padding: 2em;
+
+    border-top: 6px solid var(--color-brand);
+    border-radius: var(--radius-outer);
+
+    box-shadow: var(--shadow-surface);
+}
+
+.recommendation__form > h3 {
+    color: var(--color-brand);
+
+    font-family: var(--font-heading);
+    font-size: 2rem;
+
+    text-shadow: var(--shadow-text);
+}
+
+.recommendation__form > label {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    width: 100%;
+
+    font-weight: bold;
+}
+
+.recommendation__form > button {
+    width: 10rem;
+}

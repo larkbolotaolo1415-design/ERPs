@@ -1,0 +1,37 @@
+body {
+    display: grid;
+    grid-template-columns: 20rem 1fr;
+    grid-template-rows: 6rem 1fr;
+
+    background-color: var(--color-surface);
+}
+
+.main {
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    grid-area: 2 / 2 / 3 / 3;
+
+    height: 100%;
+    width: 100%;
+}
+
+/* Chrome, Edge, etc */
+.main::-webkit-scrollbar {
+    width: 4px;
+}
+
+.main::-webkit-scrollbar-track {
+    background: var(--color-text);
+}
+
+.main::-webkit-scrollbar-thumb {
+    cursor: pointer;
+
+    background: linear-gradient(180deg, var(--color-brand) 0%, var(--color-brand-hover) 100%);
+    border-radius: var(--radius-circle);
+}
+
+.main::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-brand) 100%);
+}

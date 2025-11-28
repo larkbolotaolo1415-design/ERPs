@@ -1,0 +1,14 @@
+.recovery__otp {
+    display: flex;
+    gap: 1rem;
+
+    width: 100%;
+}
+
+.recovery__otp > div {
+    flex: 1;
+}
+
+.recovery__otp > button {
+    width: 8rem;
+}

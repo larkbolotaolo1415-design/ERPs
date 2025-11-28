@@ -1,0 +1,92 @@
+.theme__modal-container {
+    pointer-events: none;
+    opacity: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    inset: 0;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: 0.3s ease;
+
+    &.---show {
+        pointer-events: auto;
+        opacity: 1;
+    }
+}
+
+.theme__modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    background-color: var(--color-background);
+
+    padding: 2em;
+
+    border-radius: var(--radius-outer);
+    box-shadow: var(--shadow-surface);
+
+    &, & * {
+        transition: 0.3s ease;
+    }
+
+    /* ========== [ --TYPES ] ========== */
+    &.--success {
+        border-top: 6px solid var(--color-success);
+    }
+
+    &.--success > .theme__modal-header > * {
+        color: var(--color-success);
+    }
+
+    &.--warning {
+        border-top: 6px solid var(--color-warning);
+    }
+
+    &.--warning > .theme__modal-header > * {
+        color: var(--color-warning);
+    }
+
+    &.--error {
+        border-top: 6px solid var(--color-error);
+    }
+
+    &.--error > .theme__modal-header > * {
+        color: var(--color-error);
+    }
+}
+
+.theme__modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme__modal-header > h3 {
+    font-size: 2rem;
+}
+
+.theme__modal > p {
+    width: 25rem;
+    text-align: center;
+}
+
+.theme__modal-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    margin-top: 1rem;
+}
+
+.theme__modal-action > * {
+    width: 10rem;
+}

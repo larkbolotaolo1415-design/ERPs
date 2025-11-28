@@ -1,0 +1,31 @@
+.theme__select {
+    appearance: none;
+
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+
+    height: 3.5rem;
+    width: 100%;
+
+    padding: 1em;
+
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-inner);
+
+    outline: none;
+
+    font-size: 1rem;
+    transition: 0.3s ease;
+
+    /* ========== [ :BEHAVIORS ] ========== */
+    &:hover {
+        color: var(--color-text);
+    }
+
+    &:focus {
+        color: var(--color-text);
+
+        border-color: var(--color-brand);
+        box-shadow: var(--shadow-hover);
+    }
+}

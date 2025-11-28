@@ -1,0 +1,156 @@
+<section class="dashboard">
+    <h1>OVERVIEW</h1>
+
+    <section class="dashboard__overview">
+        <div id="inventoryStatus" class="dashboard__overview-card ---great">
+            <div class="overview-card__content">
+                <div class="overview-card__content-wrapper">
+                    <svg height="40" width="40">
+                        <use href="client/assets/icons/main.svg#icon-inventory"></use>
+                    </svg>
+                </div>
+
+                <h3>Good</h3> <!-- TODO : Replace with actual data from the database using AJAX -->
+
+                <span>Inventory Status</span>
+            </div>
+
+            <a class="dashboard-report-link">View Store Report »</a>
+        </div>
+
+        <div id="revenueOverview" class="dashboard__overview-card ---great">
+            <div class="overview-card__content">
+                <div class="overview-card__content-wrapper">
+                    <svg height="40" width="40">
+                        <use href="client/assets/icons/main.svg#icon-money"></use>
+                    </svg>
+                </div>
+
+                <h3 id="revenueAmount">₱ 0.00</h3>
+ <!-- TODO : Replace with actual data from the database using AJAX -->
+
+                <span>Revenue</span>
+            </div>
+
+            <a class="dashboard-report-link">View Store Report »</a>
+        </div>
+
+        <div id="medicineAvailable" class="dashboard__overview-card ---great">
+            <div class="overview-card__content">
+                <div class="overview-card__content-wrapper">
+                    <svg height="40" width="40">
+                        <use href="client/assets/icons/main.svg#icon-medicine"></use>
+                    </svg>
+                </div>
+
+                <h3 id="medicineAvailableCount">0</h3>
+ <!-- TODO : Replace with actual data from the database using AJAX -->
+
+                <span>Medicines Available</span>
+            </div>
+
+            <a class="dashboard-shop-link">View Shop »</a>
+        </div>
+
+        <div id="medicineShortage" class="dashboard__overview-card ---bad">
+            <div class="overview-card__content">
+                <div class="overview-card__content-wrapper">
+                    <svg height="40" width="40">
+                        <use href="client/assets/icons/main.svg#icon-error"></use>
+                    </svg>
+                </div>
+
+                <h3>99</h3> <!-- TODO : Replace with actual data from the database using AJAX -->
+
+                <span>Medicine Shortage</span>
+            </div>
+
+            <a>Resolve Now »</a>
+        </div>
+    </section>
+
+    <h1>SUMMARY REPORT</h1>
+
+    <section class="dashboard__summary">
+        <div class="dashboard__summary-card">
+            <div class="summary-card__header">
+                <h3>Inventory</h3>
+                <a class="dashboard-shop-link">View Shop »</a>
+            </div>
+
+            <div class="summary-card__overview">
+                <section class="summary-card__overview-display">
+                    <h3 id="totalMedicinesCount">0</h3>
+ <!-- TODO : Replace with actual data from the database using AJAX -->
+                    <span>Total Stocks of Medicines</span>
+                </section>
+
+                <section class="summary-card__overview-display">
+                    <h3 id="medicineGroupCount">0</h3>
+ <!-- TODO : Replace with actual data from the database using AJAX -->
+                    <span>Medicine Group</span>
+                </section>
+            </div>
+        </div>
+
+        <div class="dashboard__summary-card">
+            <div class="summary-card__header">
+                <h3>Quick Report</h3>
+                <a class="dashboard-report-link">View Store Report »</a>
+            </div>
+
+            <div class="summary-card__overview">
+                <section class="summary-card__overview-display">
+                    <h3 id="totalSoldQuantity">0</h3> <!-- Updated dynamically via AJAX -->
+                    <span>Quantity of Medicines Sold</span>
+                </section>
+
+                <section class="summary-card__overview-display">
+                    <h3 id="invoiceGeneratedCount">0</h3>
+ <!-- TODO : Replace with actual data from the database using AJAX -->
+                    <span>Invoice Generated</span>
+                </section>
+            </div>
+        </div>
+
+        <div class="dashboard__summary-card">
+            <div class="summary-card__header">
+                <h3>Pharmacy</h3>
+                <a>Consult Admin »</a>
+            </div>
+
+            <div class="summary-card__overview">
+                <section class="summary-card__overview-display">
+                    <h3>99</h3> <!-- TODO : Replace with actual data from the database using AJAX -->
+                    <span>Total number of Suppliers</span>
+                </section>
+
+                <section class="summary-card__overview-display">
+                    <h3 id="employeeCount">0</h3> <!-- TODO : Replace with actual data from the database using AJAX -->
+                    <span>Total number of Employees</span>
+                </section>
+            </div>
+        </div>
+
+        <div class="dashboard__summary-card">
+            <div class="summary-card__header">
+                <h3>Customer</h3>
+                <a class="dashboard-report-link">View Store Report »</a>
+            </div>
+
+            <div class="summary-card__overview">
+                <section class="summary-card__overview-display">
+                     <h3 id="totalCustomersCount">0</h3> <!-- Total number of Customers -->
+
+                    <span>Total number of Customers</span>
+                </section>
+
+                <section class="summary-card__overview-display">
+                     <h3 id="mostFrequentMedicine">N/A</h3> <!-- TODO : Replace with actual data from the database using AJAX -->
+                    <span>Frequently bought Medicine</span>
+                </section>
+            </div>
+        </div>
+    </section>
+
+</section>

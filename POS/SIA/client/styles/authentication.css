@@ -1,0 +1,134 @@
+body {
+    background: url('../assets/images/login-background.jpg') center / cover no-repeat;
+
+    position: relative;
+    z-index: 0;
+}
+
+body::before {
+    content: '';
+    pointer-events: none;
+    opacity: 0.75;
+
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    background:
+        radial-gradient(circle at 20% 50%, var(--color-brand-hover) 0%, transparent 60%),
+        radial-gradient(circle at 80% 70%, var(--color-brand) 0%, transparent 70%),
+        radial-gradient(circle at 50% 50%, var(--color-surface) 0%, transparent 50%),
+        linear-gradient(135deg, var(--color-accent) 0%, var(--color-brand-hover) 100%);
+    background-blend-mode: multiply, overlay, lighten;
+}
+
+.authentication {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    background-color: var(--color-background);
+
+    padding: 2em;
+
+    border-radius: var(--radius-outer);
+    box-shadow: var(--shadow-surface);
+}
+
+.authentication__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    position: relative;
+    width: 100%;
+}
+
+.authentication__header img {
+    height: 6rem;
+
+    border: 3px solid var(--color-brand);
+    border-radius: var(--radius-circle);
+}
+
+.authentication__header h3 {
+    color: var(--color-brand);
+
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: bold;
+
+    text-shadow: var(--shadow-text);
+}
+
+.authentication__header-navigation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    position: absolute;
+    left: -0rem;
+    z-index: -1;
+
+    background-color: var(--color-background);
+
+    padding: 1em;
+
+    border-top-left-radius: var(--radius-outer);
+    border-bottom-left-radius: var(--radius-outer);
+
+    box-shadow: var(--shadow-surface);
+
+    &, & > * {
+        transition: 0.3s ease;
+    }
+
+    /* ========== [ ---STATES ] ========== */
+    &.---show {
+        left: -5.75rem;
+    }
+}
+
+.authentication__header-navigation > * {
+    cursor: pointer;
+
+    &:hover {
+        scale: 1.1;
+        color: var(--color-brand);
+    }
+}
+
+.authentication__input {
+    width: 25rem;
+}
+
+.authentication__input > form {
+    width: 100%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    &, & > * {
+        transition: 0.3s ease;
+    }
+}
+
+form > button {
+    margin-top: 1rem;
+    width: 9rem;
+}
+
+form > div.theme__textfield {
+    width: 100%;
+}

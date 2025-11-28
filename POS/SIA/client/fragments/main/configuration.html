@@ -1,0 +1,95 @@
+<section class="configuration">
+    <div class="configuration__tab">
+        <section id="priceTabLink" class="configuration__tab-item ---active">
+            <span>Pricing</span>
+        </section>
+    </div>
+
+    <div class="configuration__container">
+        <h1>PRICE MANAGEMENT</h1>
+
+        <section class="configuration__container-content">
+            <table class="container-content__table shop__content-table">
+                <thead>
+                    <tr>
+                        <th>Medicine ID</th>
+                        <th>Medicine Group</th>
+                        <th>Medicine Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody id="medicinePriceTableBody">
+                    <tr>
+                        <td class="table__empty" colspan="8">
+                            No medicines found matching your search criteria.
+                        </td>
+                    </tr>        </tbody>
+            </table>
+
+            <div class="container-content__sidebar">
+                <h3>SET PRICE</h3>
+
+                <form id="adminConfigurationForm" class="container-content__sidebar-form">
+                    <section class="sidebar-form__product">
+                        <h3>PRODUCT NAME</h3>
+
+                        <span>Price</span>
+                        <div class="theme__textfield --no-icon">
+                            <input id="priceTextfield" type="number" name="medicine-price" step="0.01" placeholder="Medicine Price" required>
+                        </div>
+                    </section>
+
+                    <section class="sidebar-form__bill">
+                        <h3>TAX</h3>
+
+                        <span>VAT</span>
+                        <div class="theme__textfield --no-icon">
+                            <input id="vatTextfield" type="number" name="medicine-price" step="0.01" placeholder="VAT Value" required>
+                        </div>
+
+                        <h3>DISCOUNTS</h3>
+
+                        <span>PWD</span>
+                        <div class="theme__textfield --no-icon">
+                            <input id="pwdTextfield" type="number" name="pwd" step="0.01" placeholder="Discount Value" required>
+                        </div>
+
+                        <span>Senior</span>
+                        <div class="theme__textfield --no-icon">
+                            <input id="seniorTextfield" type="number" name="senior" step="0.01" placeholder="Discount Value" required>
+                        </div>
+                    </section>
+
+                    <section class="sidebar-form__stock">
+                        <h3>STOCKS</h3>
+
+                        <span>Minimum stock before shortage</span>
+                        <div class="theme__textfield --no-icon">
+                            <input id="stockTextfield" type="number" name="minimum-stock" step="0.01" placeholder="Value" required>
+                        </div>
+
+                        <span>Minimum medicine count before warning</span>
+                        <div class="theme__textfield --no-icon">
+                            <input id="warningTextfield" type="number" name="warning" step="0.01" placeholder="Value" required>
+                        </div>
+
+                        <span>Minimum medicine count before critical</span>
+                        <div class="theme__textfield --no-icon">
+                            <input id="criticalTextfield" type="number" name="critical" step="0.01" placeholder="Value" required>
+                        </div>
+                    </section>
+
+                    <section class="sidebar-form__action">
+                        <button id="defaultButton" class="theme__button --critical" type="button">
+                            <span>DEFAULT</span>
+                        </button>
+
+                        <button class="theme__button --primary">
+                            <span>SAVE</span>
+                        </button>
+                    </section>
+                </form>
+            </div>
+        </section>
+    </div>
+</section>

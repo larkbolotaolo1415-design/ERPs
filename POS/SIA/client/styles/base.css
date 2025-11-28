@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    /* ========== [ COLOR PALETTE ] ========== */
+    --color-background: #ffffff;
+    --color-surface: #f5f6fa;  /* --- text color on contrasted background */
+    --color-accent: #1e3a8a;
+
+    --color-brand: #2563eb;
+    --color-brand-hover: #93c5fd; /* --- border color on focus; tooltip background color */
+
+    --color-border: #c7c9d1;
+
+    --color-text: #2d3436;
+    --color-text-muted: #6b7280; /* --- extra color added */
+
+    --color-success: #10b981;
+    --color-success-light: #88dcc0; /* --- extra color added; success color at 50% opacity */
+    --color-warning: #fbbf24;
+    --color-warning-light: #fddf92; /* --- extra color added; warning color at 50% opacity */
+    --color-error: #dc2626;
+    --color-error-light: #ee9393; /* --- extra color added; error color at 50% opacity */
+
+    --color-disabled: #dcdde1;
+
+    /* ========== [ BORDER RADII ] ========== */
+    --radius-circle: 999rem;
+    --radius-outer: 1rem;
+    --radius-inner: 0.5rem;
+
+    /* ========== [ TYPOGRAPHY ] ========== */
+    --font-heading: "Inter", sans-serif;
+    --font-body: "Roboto", sans-serif;
+
+    /* ========== [ SHADOWS ] ========== */
+    /* TODO : Requires a lil' bit of tuning */
+    --shadow-surface: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    --shadow-hover: 0px 4px 8px rgba(0, 0, 0, 0.25); /* --- element shadow on focus */
+    --shadow-text: 0px 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+*:not(use) {
+    color: var(--color-text);
+
+    margin: 0;
+    padding: 0;
+
+    font-family: var(--font-body);
+    letter-spacing: 2px;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--color-background);
+    height: 100vh;
+}
+
+::placeholder {
+    color: var(--color-text-muted);
+}

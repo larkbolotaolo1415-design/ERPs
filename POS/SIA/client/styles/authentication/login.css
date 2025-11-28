@@ -1,0 +1,11 @@
+.login > a {
+    cursor: pointer;
+    align-self: flex-end;
+
+    color: var(--color-brand);
+
+    /* ========== [ :BEHAVIORS ] ========== */
+    &:hover {
+        color: var(--color-brand-hover);
+    }
+}

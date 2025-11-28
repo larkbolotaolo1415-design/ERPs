@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="/sia/">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pharma Plus</title>
+
+    <!-- ========== [ STYLES ] ========== -->
+    <link rel="stylesheet" href="client/styles/base.css">
+    <link rel="stylesheet" href="client/styles/components/area.css">
+    <link rel="stylesheet" href="client/styles/components/button.css">
+    <link rel="stylesheet" href="client/styles/components/modal.css">
+    <link rel="stylesheet" href="client/styles/components/notification.css">
+    <link rel="stylesheet" href="client/styles/components/select.css">
+    <link rel="stylesheet" href="client/styles/components/textfield.css">
+    <link rel="stylesheet" href="client/styles/components/tooltip.css">
+
+    <link rel="stylesheet" href="client/styles/authentication.css">
+    <link rel="stylesheet" href="client/styles/authentication/login.css">
+    <link rel="stylesheet" href="client/styles/authentication/recovery.css">
+    <link rel="stylesheet" href="client/styles/authentication/reset.css">
+
+    <!-- ========== [ SCRIPTS ] ========== -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+    <script type="module" src="client/scripts/authentication.js"></script>
+</head>
+
+<body>
+    <!-- ========== [ MAIN ] ========== -->
+    <main class="authentication">
+        <section class="authentication__header">
+            <img src="client/assets/images/logo.png" alt="Company Logo">
+            <h3 id="headerText">WELCOME BACK</h3>
+
+            <aside id="navigationPanel" class="authentication__header-navigation">
+                <svg id="returnLink" height="28" width="28" data-tooltip="Return Back">
+                    <use href="client/assets/icons/authentication.svg#icon-return"></use>
+                </svg>
+                <svg id="loginLink" height="28" width="28" data-tooltip="Return to Login">
+                    <use href="client/assets/icons/authentication.svg#icon-login"></use>
+                </svg>
+            </aside>
+        </section>
+
+        <section id="router" class="authentication__input">
+            <!-- Forms are loaded here dynamically through AJAX request -->
+        </section>
+    </main>
+
+    <!-- ========== [ TOOLTIP ] ========== -->
+    <div id="tooltip" class="theme__tooltip"></div>
+
+    <!-- ========== [ MODAL ] ========== -->
+    <div id="modalContainer" class="theme__modal-container">
+        <section id="modal" class="theme__modal --success">
+            <div class="theme__modal-header">
+                <svg height="64" width="64">
+                    <use href="client/assets/icons/main.svg#icon-success"></use>
+                </svg>
+
+                <h3></h3>
+            </div>
+
+            <p></p>
+
+            <div class="theme__modal-action">
+                <button id="cancelButton" class="theme__button --critical">
+                    <span></span>
+                </button>
+
+                <button id="confirmButton" class="theme__button --primary">
+                    <span></span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== [ NOTIFICATION ] ========== -->
+    <div id="notification" class="theme__notification-container"></div>
+</body>
+
+</html>

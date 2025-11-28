@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/sia/">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pharma Plus</title>
+
+    <!-- ========== [ STYLES ] ========== -->
+    <link rel="stylesheet" href="client/styles/base.css">
+    <link rel="stylesheet" href="client/styles/components/area.css">
+    <link rel="stylesheet" href="client/styles/components/button.css">
+    <link rel="stylesheet" href="client/styles/components/modal.css">
+    <link rel="stylesheet" href="client/styles/components/notification.css">
+    <link rel="stylesheet" href="client/styles/components/select.css">
+    <link rel="stylesheet" href="client/styles/components/textfield.css">
+    <link rel="stylesheet" href="client/styles/components/tooltip.css">
+
+    <link rel="stylesheet" href="client/styles/main.css">
+    <link rel="stylesheet" href="client/styles/main/sidebar.css">
+    <link rel="stylesheet" href="client/styles/main/header.css">
+    <link rel="stylesheet" href="client/styles/main/configuration.css">
+    <link rel="stylesheet" href="client/styles/main/dashboard.css">
+    <link rel="stylesheet" href="client/styles/main/shop.css">
+    <link rel="stylesheet" href="client/styles/main/refund.css">
+    <link rel="stylesheet" href="client/styles/main/policy.css">
+    <link rel="stylesheet" href="client/styles/main/recommendation.css">
+    <link rel="stylesheet" href="client/styles/main/report.css">
+
+    <!-- ========== [ SCRIPTS ] ========== -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+    <script type="module" src="client/scripts/main.js"></script>
+</head>
+<body>
+    <!-- ========== [ SIDEBAR ] ========== -->
+    <aside class="sidebar">
+        <section class="sidebar__header">
+            <img src="client/assets/images/logo.png" alt="Company Logo">
+            <h3>Pharma Plus</h3>
+        </section>
+
+        <section class="sidebar__navigation">
+            <div id="adminNavigation">
+                <div class="sidebar__navigation-divider">
+                    <hr>
+                    <span>ADMIN</span>
+                </div>
+
+                <div id="configurationLink" class="sidebar__navigation-item">
+                    <svg height="28" width="28">
+                        <use href="client/assets/icons/main.svg#icon-settings"></use>
+                    </svg>
+                    <span>Configuration</span>
+                </div>
+            </div>
+
+            <div class="sidebar__navigation-divider">
+                <hr>
+                <span>COMMON</span>
+            </div>
+
+            <div id="dashboardLink" class="sidebar__navigation-item ---active">
+                <svg height="28" width="28">
+                    <use href="client/assets/icons/main.svg#icon-dashboard"></use>
+                </svg>
+                <span>Dashboard</span>
+            </div>
+
+            <div id="shopLink" class="sidebar__navigation-item">
+                <svg height="28" width="28">
+                    <use href="client/assets/icons/main.svg#icon-shop"></use>
+                </svg>
+                <span>Shop</span>
+            </div>
+
+            <div id="reportLink" class="sidebar__navigation-item">
+                <svg height="28" width="28">
+                    <use href="client/assets/icons/main.svg#icon-report"></use>
+                </svg>
+                <span>Store Report</span>
+            </div>
+
+            <div id="policyLink" class="sidebar__navigation-item">
+                <svg height="28" width="28">
+                    <use href="client/assets/icons/main.svg#icon-policy"></use>
+                </svg>
+                <span>Pharmacy Policy</span>
+            </div>
+
+            <div id="recommendationLink" class="sidebar__navigation-item">
+                <svg height="28" width="28">
+                    <use href="client/assets/icons/main.svg#icon-recommendation"></use>
+                </svg>
+                <span>Recommendation</span>
+            </div>
+        </section>
+    </aside>
+
+    <!-- ========== [ HEADER ] ========== -->
+    <header class="header">
+        <h3 id="fragmentHeader">DASHBOARD</h3>
+
+        <section class="header__action">
+            <div class="header__action-greet">
+                <span id="greetText">Good Morning!</span>
+                <span id="timeText">November 16 2025 | 13:03</span>
+            </div>
+
+            <div class="header__action-profile">
+                <img id="profile" src="client/assets/images/logo.png" alt="Employee Image">
+
+                <section id="profileContainer" class="action-profile__container">
+                    <div class="action-profile__container-header">
+                        <img src="client/assets/images/logo.png" alt="Employee Image">
+
+                        <section>
+                            <span id="employeeName">Shrek the green globin</span>
+                            <span id="employeeRole">ADMIN</span>
+                        </section>
+                    </div>
+
+                    <hr>
+
+                    <div id="notificationButton">Notification</div>
+                    <div id="logoutButton">Logout</div>
+                </section>
+            </div>
+        </section>
+    </header>
+
+    <!-- ========== [ CONTENT ] ========== -->
+    <main id="router" class="main">
+        <!-- Fragments are loaded here dynamically through AJAX request -->
+    </main>
+
+    <!-- ========== [ TOOLTIP ] ========== -->
+    <div id="tooltip" class="theme__tooltip"></div>
+
+    <!-- ========== [ MODAL ] ========== -->
+    <div id="modalContainer" class="theme__modal-container">
+        <section id="modal" class="theme__modal --success">
+            <div class="theme__modal-header">
+                <svg height="64" width="64">
+                    <use href="client/assets/icons/main.svg#icon-success"></use>
+                </svg>
+
+                <h3></h3>
+            </div>
+
+            <p></p>
+
+            <div class="theme__modal-action">
+                <button id="cancelButton" class="theme__button --critical">
+                    <span></span>
+                </button>
+
+                <button id="confirmButton" class="theme__button --primary">
+                    <span></span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== [ NOTIFICATION ] ========== -->
+    <div id="notification" class="theme__notification-container"></div>
+</body>
+</html>

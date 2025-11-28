@@ -1,0 +1,12 @@
+{
+  "name": "sia-tailwind",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  },
+  "scripts": {
+    "build:css": "tailwindcss -i ./client/styles/tailwind-input.css -o ./client/assets/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./client/styles/tailwind-input.css -o ./client/assets/tailwind.css --watch"
+  }
+}

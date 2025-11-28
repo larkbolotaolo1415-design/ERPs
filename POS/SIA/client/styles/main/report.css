@@ -1,0 +1,318 @@
+.report__title{
+    
+
+    display: flex;
+    align-items: center;
+
+
+    height: 5em;
+
+    margin-left: 1em;
+    padding-left: 1em;
+
+    font-size: 25px;
+    font-weight: bold;
+
+    text-shadow: var(--shadow-text);
+
+
+
+}
+
+.report__tab{
+    display: flex;
+    align-items: center;
+
+    height: 3em;
+
+    margin: 1em;
+    padding-left: 1em;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    text-shadow: var(--shadow-text);
+    
+}
+
+
+.report__tab span{  
+    cursor: pointer;
+    background-color: var(--color-background);
+
+    padding: 2em;
+
+
+    &.---active{
+        background-color: var(--color-brand);
+    }
+
+
+    &:hover{
+        background-color: blue;
+        color: white;
+    }
+    
+}
+.report__content__flex{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    
+    background-color: var(--color-background);
+    height: 100em;
+
+    margin: 2em;
+    border-radius: var(--radius-outer);
+}
+
+
+.report__view{
+    flex: 3;
+
+    background-color: var(--color-background);
+
+    margin-right: 1em;
+
+   
+    box-shadow: var(--shadow-surface);
+
+    /* A4 Paper Dimensions - Enlarged */
+    width: 24cm;
+    height: 35cm;
+    padding: 3cm;
+    margin: 1em;
+    overflow: auto;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.report__function{
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+   
+    padding: 2em;
+    margin: 1em;
+
+    border-radius: var(--radius-outer);
+    box-shadow: var(--shadow-surface);
+}
+
+.report__download{
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+   
+
+
+    background-color: var(--color-background);
+    
+    width: 100%;
+    padding: 1em;
+
+
+    gap: 25px;
+
+}
+
+.report__download button{
+    color: white;
+    border: none;
+}
+
+
+
+
+
+
+
+.report__list-table{
+    overflow: hidden;
+    background-color: var(--color-background);
+   
+
+    border-radius: var(--radius-outer);
+    border-collapse:collapse;
+
+    box-shadow: var(--shadow-surface);
+    text-align: left;
+}
+
+.report__list-table th, .report__list-table td{
+    padding: 1em;
+}
+
+.report__list-table thead th{
+    background-color: var(--color-brand);
+    color: var(--color-surface);
+
+    font-family: var(--font-heading);
+    font-weight: bold;
+}
+
+.report__list-table tbody tr {
+      cursor: pointer;
+
+    /* ========== [ ---STATES ] ========== */
+    &.---bad {
+        background-color: var(--color-error-light) !important;
+    }
+
+    /* ========== [ :BEHAVIOR ] ========== */
+    &:hover {
+        background-color: var(--color-brand-hover) !important;
+    }
+}
+
+
+.report__list-table tbody tr td.table__empty {
+    cursor: default;
+    background-color: var(--color-disabled);
+    color: var(--color-text-muted);
+
+    height: 5rem;
+
+    font-weight: bold;
+    font-style: italic;
+
+    text-align: center;
+
+    /* ========== [ ---STATES ] ========== */
+    &.---hidden {
+        display: none;
+    }
+}
+
+/* ========== [ REPORT VIEW STYLES ] ========== */
+
+.report__header {
+    text-align: center;
+    margin-bottom: 3rem;
+    border-bottom: 2px solid var(--color-brand);
+    padding-bottom: 2rem;
+}
+
+.report__header h2 {
+    margin: 0;
+    font-size: 2.2rem;
+    color: var(--color-brand);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 0.5rem;
+}
+
+.report__header p {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.report__section {
+    margin-bottom: 2.5rem;
+}
+
+.report__section h3,
+.report__section h4 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.3rem;
+    color: var(--color-brand);
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--color-brand);
+    padding-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.report__info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.report__info-item {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-text);
+    padding: 0.5rem 0;
+}
+
+.report__info-item strong {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.report__detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 1rem;
+}
+
+.report__detail-table thead {
+    background-color: var(--color-brand);
+    color: var(--color-surface);
+}
+
+.report__detail-table th {
+    padding: 1.2rem;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid var(--color-brand);
+}
+
+.report__detail-table td {
+    padding: 1.2rem;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.report__detail-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.report__summary {
+    margin: 3rem 0;
+    padding: 2rem;
+    border: 2px solid var(--color-brand);
+    border-radius: var(--radius-outer);
+    background-color: #f5f5f5;
+}
+
+.report__summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    padding: 1rem 0;
+}
+
+.report__summary-row strong {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.report__summary-row.--total {
+    border-top: 2px solid var(--color-brand);
+    padding-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--color-brand);
+}
+
+.report__footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+}
+

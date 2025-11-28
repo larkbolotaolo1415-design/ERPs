@@ -1,0 +1,210 @@
+<section class="shop">
+    <div class="shop__content">
+        <h1>INVENTORY</h1>
+
+    <section class="shop__content-action">
+        <div class="theme__textfield">
+            <svg height="28" width="28">
+                <use href="client/assets/icons/main.svg#icon-search"></use>
+            </svg>
+            <input id="searchTextfield" type="text" name="search" placeholder="Search for medicine...">
+        </div>
+
+        <div class="content-action__button">
+            <button id="refundButton" class="theme__button --critical" type="button">
+                <svg height="28" width="28">
+                    <use href="client/assets/icons/main.svg#icon-shop"></use>
+                </svg>
+                <span>REFUND</span>
+            </button>
+
+            <button id="cartButton" class="theme__button --primary" type="button">
+                <svg height="28" width="28">
+                    <use href="client/assets/icons/main.svg#icon-shop"></use>
+                </svg>
+                <span>CART</span>
+            </button>
+        </div>
+
+    </section>
+
+    <table class="shop__content-table">
+        <thead>
+            <tr>
+                <th>Medicine ID</th>
+                <th>Medicine Group</th>
+                <th>Medicine Name</th>
+                <th>Generic Name</th>
+                <th>Dosage</th>
+                <th>Form</th>
+                <th>Stock</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+
+        <tbody id="medicinesTableBody">
+            <tr>
+                <td class="table__empty ---hidden" colspan="8">
+                    No medicines found matching your search criteria.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="cartSidebar" class="shop__cart">
+    <section class="shop__cart-header">
+        <h1>YOUR CART</h1>
+        <p>Review your order and apply available discounts.</p>
+    </section>
+
+    <section class="shop__cart-container" id="cartContainer">
+    </section>
+
+    <section class="shop__cart-total">
+        <div class="cart-total__item">
+            <span>Subtotal</span>
+            <span id="subtotalAmount">₱0.00</span>
+        </div>
+
+        <div class="cart-total__item">
+            <span>Discount</span>
+            <span id="discountAmount">₱0.00</span>
+        </div>
+
+        <div class="cart-total__item">
+            <span>Tax (12%)</span>
+            <span id="taxAmount">₱0.00</span>
+        </div>
+
+        <div class="cart-total__item">
+            <span>Total</span>
+            <span id="totalAmount">₱0.00</span>
+        </div>
+    </section>
+
+   <section class="shop__cart-action">
+
+
+
+    <!-- Customer type selection -->
+    <div class="cart-action__customer-type" style="margin-bottom:10px;">
+        <span>Customer Type:</span>
+        <label>
+            <input type="radio" name="customerType" value="patient" checked> Patient
+        </label>
+        <label>
+            <input type="radio" name="customerType" value="walkin"> Walk-in
+        </label>
+    </div>
+
+    <!-- Patient ID field -->
+    <div class="cart-action__id" id="patientField">
+        <span>Patient ID:</span>
+        <div class="theme__textfield --no-icon">
+            <input id="patientIdTextfield"
+                   class="theme__textfield"
+                   type="text"
+                   name="patient-id"
+                   placeholder="Enter Patient ID (PT-0000)">
+        </div>
+    </div>
+
+    <!-- Walk-in name field -->
+    <div class="cart-action__walkin" id="walkinField" style="display:none;">
+        <span>Walk-in Name:</span>
+        <div class="theme__textfield --no-icon">
+            <input id="walkinNameTextfield"
+                   class="theme__textfield"
+                   type="text"
+                   name="walkin-name"
+                   placeholder="Enter Customer Name">
+        </div>
+    </div>
+
+        <section class="shop__cart-action">
+            <div class="cart-action__discount">
+                <span>Discount:</span>
+                <select id="discountSelect" class="theme__select" name="discount">
+                    <option value="none">None</option>
+                    <option value="pwd">PWD</option>
+                    <option value="senior">Senior</option>
+                </select>
+            </div>
+
+            <div class="cart-action__button">
+                <button id="resetCartButton" class="theme__button --critical">
+                    <span>RESET</span>
+                </button>
+
+                <button id="orderButton" class="theme__button --primary">
+                    <span>ORDER</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== [ REFUND ] ========== -->
+<section id="refundModal" class="refund">
+    <div class="refund__container">
+        <section class="refund__container-header">
+            <svg height="64" width="64">
+                <use href="client/assets/icons/main.svg#icon-receipt"></use>
+            </svg>
+
+            <h3>REFUND</h3>
+        </section>
+
+        <p>Please enter the receipt's ticket ID</p>
+
+        <section class="refund__container-input">
+            <div class="theme__textfield --no-icon">
+                <input id="invoiceTextfield" type="text" placeholder="Invoice Number" maxlength="20" required>
+            </div>
+
+            <section id="invoiceInfo" class="container-input__receipt">
+                <div class="container-input__receipt-item">
+                    <section>
+                        <span>Medicine Name</span>
+                        <span>3x</span>
+                    </section>
+                    <span>₱300.00</span>
+                </div>
+
+                <div class="container-input__receipt-item">
+                    <section>
+                        <span>Medicine Name</span>
+                        <span>3x</span>
+                    </section>
+                    <span>₱300.00</span>
+                </div>
+
+                <div class="container-input__receipt-item">
+                    <section>
+                        <span>Medicine Name</span>
+                        <span>3x</span>
+                    </section>
+                    <span>₱300.00</span>
+                </div>
+
+                <div class="container-input__receipt-item">
+                    <section>
+                        <span>Medicine Name</span>
+                        <span>3x</span>
+                    </section>
+                    <span>₱300.00</span>
+                </div>
+            </section>
+
+            <div class="container-input__action">
+                <button id="backButton" class="theme__button --critical">
+                    <span>BACK</span>
+                </button>
+
+                <button id="validateInvoiceButton" class="theme__button --primary">
+                    <span>VALIDATE</span>
+                </button>
+            </div>
+        </section>
+    </div>
+</section>

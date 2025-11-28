@@ -1,0 +1,81 @@
+.theme__button {
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    height: 3.5rem;
+
+    padding: 1em 1.5em;
+
+    border: 3px solid var(--color-brand);
+    border-radius: var(--radius-inner);
+
+    &, & > * {
+        transition: 0.3s ease;
+    }
+
+    /* ========== [ --TYPES ] ========== */
+    &.--primary {
+        background-color: var(--color-brand);
+    }
+
+    &.--primary > * {
+        color: var(--color-surface);
+    }
+
+    &.--secondary {
+        background-color: var(--color-surface);
+    }
+
+    &.--secondary > * {
+        color: var(--color-brand);
+    }
+
+    &.--critical {
+        background-color: var(--color-error);
+        border-color: var(--color-error);
+    }
+
+    &.--critical > * {
+        color: var(--color-surface);
+    }
+
+    /* ========== [ :BEHAVIORS ] ========== */
+    &:not(:disabled):hover {
+        background-color: var(--color-brand-hover);
+        box-shadow: var(--shadow-hover);
+    }
+
+    &:not(:disabled):hover > * {
+        color: var(--color-brand);
+    }
+
+    &.--critical:not(:disabled):hover {
+        background-color: var(--color-error-light);
+    }
+
+    &.--critical:not(:disabled):hover > * {
+        color: var(--color-error);
+    }
+
+    &:disabled {
+        cursor: default;
+
+        background-color: var(--color-disabled);
+        border-color: var(--color-border);
+    }
+
+    &:disabled > * {
+        color: var(--color-text-muted);
+    }
+}
+
+.theme__button > span {
+    flex: 1;
+
+    font-size: 1rem;
+    font-weight: bold;
+}

@@ -1,0 +1,78 @@
+.theme__textfield {
+    position: relative;
+
+    height: 3.5rem;
+
+    &, & > * {
+        transition: 0.3s ease;
+    }
+    /* ========== [ --TYPES ] ========== */
+    &.--no-icon > input {
+        padding: 1em !important;
+    }
+
+    /* ========== [ :BEHAVIORS ] ========== */
+    &:hover > * {
+        color: var(--color-text);
+    }
+
+    &:has(input:focus) > input {
+        color: var(--color-text);
+
+        border-color: var(--color-brand);
+        box-shadow: var(--shadow-hover);
+    }
+
+    &:has(input:focus) > svg:first-child {
+        color: var(--color-brand);
+    }
+
+    &:hover > svg:last-child, &:has(input:focus) > svg:last-child {
+        opacity: 1;
+    }
+
+    &:has(input:focus) > svg:last-child {
+        color: var(--color-text);
+    }
+}
+
+.theme__textfield > input {
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+
+    height: 100%;
+    width: 100%;
+
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-inner);
+
+    outline: none;
+
+    font-size: 1rem;
+
+    &[type='text'], &[type='email'] {
+        padding: 1em 1em 1em 3.25em;
+    }
+
+    &[id*='password'], &[id*='Password'] {
+        padding: 1em 3.25em;
+    }
+}
+
+.theme__textfield > svg {
+    position: absolute;
+    top: 0.875rem;
+
+    color: var(--color-text-muted);
+
+    &:first-child {
+        pointer-events: none;
+        left: 1rem;
+    }
+
+    &:last-child {
+        opacity: 0;
+        cursor: pointer;
+        right: 1rem;
+    }
+}

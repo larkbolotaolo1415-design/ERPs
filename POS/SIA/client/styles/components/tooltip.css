@@ -1,0 +1,17 @@
+.theme__tooltip {
+    pointer-events: none;
+
+    display: none;
+
+    position: absolute;
+    z-index: 999;
+
+    background-color: var(--color-brand-hover);
+
+    padding: 0.5em;
+
+    border-radius: var(--radius-inner);
+
+    box-shadow: var(--shadow-surface);
+    font-size: 0.75rem;
+}
