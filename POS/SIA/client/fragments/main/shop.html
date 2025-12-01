@@ -10,6 +10,17 @@
             <input id="searchTextfield" type="text" name="search" placeholder="Search for medicine...">
         </div>
 
+      <!--   <div class="prescription-selector">
+            <label for="prescriptionComboBox" style="font-weight: 600; margin-right: 10px;">Prescription ID:</label>
+            <select id="prescriptionComboBox" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+                <option value="">-- Loading prescriptions... --</option>
+            </select>
+            <button id="refreshPrescriptionButton" class="theme__button --secondary" type="button" style="margin-left: 10px;">
+                <span>REFRESH</span>
+            </button>
+            <div id="prescriptionMessage" style="display: none; padding: 10px; margin-top: 10px; border-radius: 4px; font-size: 12px;"></div>
+        </div> -->
+
         <div class="content-action__button">
             <button id="refundButton" class="theme__button --critical" type="button">
                 <svg height="28" width="28">
@@ -110,6 +121,16 @@
         </div>
     </div>
 
+    <!-- Prescription selector in cart panel -->
+    <div class="cart-action__prescription" style="margin-top:10px;">
+        <span>Prescription:</span>
+        <div style="margin-top:6px;">
+            <select id="prescriptionComboBoxCart" class="theme__select" style="width:100%; padding:8px;">
+                <option value="">-- Loading prescriptions... --</option>
+            </select>
+        </div>
+    </div>
+
     <!-- Walk-in name field -->
     <div class="cart-action__walkin" id="walkinField" style="display:none;">
         <span>Walk-in Name:</span>
@@ -122,27 +143,27 @@
         </div>
     </div>
 
-        <section class="shop__cart-action">
-            <div class="cart-action__discount">
-                <span>Discount:</span>
-                <select id="discountSelect" class="theme__select" name="discount">
-                    <option value="none">None</option>
-                    <option value="pwd">PWD</option>
-                    <option value="senior">Senior</option>
-                </select>
-            </div>
-
-            <div class="cart-action__button">
-                <button id="resetCartButton" class="theme__button --critical">
-                    <span>RESET</span>
-                </button>
-
-                <button id="orderButton" class="theme__button --primary">
-                    <span>ORDER</span>
-                </button>
-            </div>
-        </section>
+    <!-- Discount selection -->
+    <div class="cart-action__discount">
+        <span>Discount:</span>
+        <select id="discountSelect" class="theme__select" name="discount">
+            <option value="none">None</option>
+            <option value="pwd">PWD</option>
+            <option value="senior">Senior</option>
+        </select>
     </div>
+
+    <!-- Action buttons -->
+    <div class="cart-action__button">
+        <button id="resetCartButton" class="theme__button --critical">
+            <span>RESET</span>
+        </button>
+
+        <button id="orderButton" class="theme__button --primary">
+            <span>ORDER</span>
+        </button>
+    </div>
+    </section>
 
     <!-- ========== [ REFUND ] ========== -->
 <section id="refundModal" class="refund">
@@ -208,3 +229,6 @@
         </section>
     </div>
 </section>
+
+<!-- Import Prescription API Script -->
+<!-- jQuery and prescription-api.js are already loaded from main.html -->

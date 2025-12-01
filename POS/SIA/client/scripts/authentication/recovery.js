@@ -31,7 +31,7 @@ export const renderRecoveryForm = (router, speed = 300) => {
                 const otp = otpTextfield.val().trim();
 
                 $.ajax({
-                    url: '/SIA/server/api/authentication/verify_otp.php',
+                    url: '/ERPs/POS/SIA/server/api/authentication/verify_otp.php',
                     method: 'POST',
                     data: { email, otp },
                     success: function(response) {
@@ -70,7 +70,7 @@ function setupOTPButton(emailTextfield, button) {
         if (!emailTextfield[0].reportValidity()) return;
 
         $.ajax({
-            url: '/SIA/server/api/authentication/send_otp.php',
+            url: '/ERPs/POS/SIA/server/api/authentication/send_otp.php',
             method: 'POST',
             data: { email },
             success: function(response) {

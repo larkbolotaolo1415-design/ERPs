@@ -476,8 +476,79 @@ orderButton.on('click', () => {
 
 
 
-            // Load medicines
+            // Load medicines and prescriptions
             loadMedicines()
+            loadPrescriptions()  // Load prescriptions after shop fragment is loaded
+
+            // Listen for prescription medicines to be added to cart
+            document.addEventListener('addPrescriptionMedicines', function(e) {
+                const prescriptionMedicines = (e && e.detail && e.detail.medicines) ? e.detail.medicines : [];
+                console.log("Adding prescription medicines to cart (raw):", prescriptionMedicines);
+
+                if (!Array.isArray(prescriptionMedicines) || prescriptionMedicines.length === 0) {
+                    console.warn('No medicines received from prescription event');
+                    return;
+                }
+
+                // Clear cart first
+                cart = [];
+
+                // Helper to normalize candidate ids/names
+                const normalize = s => (s || '').toString().trim();
+
+                // Add each medicine from prescription to cart
+                prescriptionMedicines.forEach(function(med) {
+                    // Determine id/name candidates from prescription API
+                    const medIdCandidates = [med.medicine_id, med.id, med.med_id, med.record_id, med.medicineId, med.code].map(normalize).filter(Boolean);
+                    const medName = normalize(med.medicine_name || med.name || med.medicine || med.generic_name);
+                    const quantity = parseInt(med.quantity || med.qty || med.prescribed_qty || 1) || 1;
+                    const priceFromMed = parseFloat(med.price || med.unit_price || med.rate || 0) || 0;
+
+                    // Try to find matching medicine in loaded medicines by id or name
+                    let fullMedicine = null;
+                    if (medIdCandidates.length) {
+                        fullMedicine = medicines.find(m => medIdCandidates.includes(normalize(m.medicine_id)) || medIdCandidates.includes(normalize(m.medicine_id + '')));
+                    }
+                    if (!fullMedicine && medName) {
+                        fullMedicine = medicines.find(m => normalize(m.medicine_name).toLowerCase() === medName.toLowerCase() || normalize(m.generic_name).toLowerCase() === medName.toLowerCase());
+                    }
+
+                    const price = priceFromMed || (fullMedicine ? parseFloat(fullMedicine.price || 0) : 0);
+
+                    if (fullMedicine) {
+                        const stock = parseInt(fullMedicine.stock || 0) || 0;
+                        if (stock <= 0) {
+                            console.warn(`Medicine out of stock: ${fullMedicine.medicine_name} (${fullMedicine.medicine_id})`);
+                            return; // skip adding out-of-stock medicines
+                        }
+
+                        cart.push({
+                            medicine_id: fullMedicine.medicine_id,
+                            medicine_name: fullMedicine.medicine_name,
+                            price: price,
+                            quantity: Math.min(quantity, stock)
+                        });
+                        console.log(`Added to cart from inventory: ${fullMedicine.medicine_name} x${Math.min(quantity, stock)}`);
+                    } else {
+                        // Fallback: add using prescription data (no stock check)
+                        const fallbackId = medIdCandidates[0] || '';
+                        cart.push({
+                            medicine_id: fallbackId,
+                            medicine_name: medName || ('Unknown (' + fallbackId + ')'),
+                            price: price,
+                            quantity: quantity
+                        });
+                        console.warn(`Added to cart from prescription data (no inventory match): ${medName || fallbackId}`);
+                    }
+                });
+
+                // Re-render cart and totals
+                renderCart();
+                updateCartTotals();
+
+                // Show notification
+                showNotification("Prescription medicines added to cart", "success");
+            });
         })
 
         router.fadeIn(speed)

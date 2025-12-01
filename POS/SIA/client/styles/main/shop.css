@@ -249,7 +249,7 @@
     gap: 1rem;
 }
 
-.cart-action__discount, .cart-action__id {
+.cart-action__discount, .cart-action__id, .cart-action__prescription {
     display: flex;
     flex-direction: column;
     gap: 1rem;

@@ -9,8 +9,9 @@ export const renderReport = (router, speed = 300) => {
     router.fadeOut(speed, () => {
         router.load(path, () => {
             // ========== [ FRAGMENT INITIALIZERS ] ========== //
-            initializeReportDownload()
-            loadInvoices()
+                initializeReportDownload()
+                initializeReportTabs()
+                loadInvoices()
             // ========== [ ... ] ========== //
         })
         router.fadeIn(speed)
@@ -87,6 +88,242 @@ function displayInvoiceList(invoices) {
 }
 
 /**
+ * Initialize report tab switching (Sales / Invoice)
+ */
+function initializeReportTabs() {
+    const salesTab = document.getElementById('salesTab')
+    const invoiceTab = document.getElementById('invoiceTab')
+
+    if (salesTab) {
+        // Attach to tab container div
+        salesTab.addEventListener('click', function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+            // toggle active classes
+            document.querySelectorAll('.configuration__tab-item').forEach(i => i.classList.remove('---active'))
+            salesTab.classList.add('---active')
+            showSalesTable()
+        })
+        
+        // Also attach to span inside
+        const salesSpan = salesTab.querySelector('span')
+        if (salesSpan) {
+            salesSpan.addEventListener('click', function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+                document.querySelectorAll('.configuration__tab-item').forEach(i => i.classList.remove('---active'))
+                salesTab.classList.add('---active')
+                showSalesTable()
+            })
+        }
+    }
+
+    if (invoiceTab) {
+        // Attach to tab container div
+        invoiceTab.addEventListener('click', function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+            document.querySelectorAll('.configuration__tab-item').forEach(i => i.classList.remove('---active'))
+            invoiceTab.classList.add('---active')
+            showInvoiceTable()
+        })
+        
+        // Also attach to span inside
+        const invoiceSpan = invoiceTab.querySelector('span')
+        if (invoiceSpan) {
+            invoiceSpan.addEventListener('click', function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+                document.querySelectorAll('.configuration__tab-item').forEach(i => i.classList.remove('---active'))
+                invoiceTab.classList.add('---active')
+                showInvoiceTable()
+            })
+        }
+    }
+}
+
+function showSalesTable() {
+    const salesWrapper = document.getElementById('salesTableWrapper')
+    const invoiceWrapper = document.getElementById('invoiceTableWrapper')
+    
+    if (salesWrapper) salesWrapper.style.display = 'block'
+    if (invoiceWrapper) invoiceWrapper.style.display = 'none'
+    
+    loadSalesReport()
+    // Build accordion charts after aggregation
+    loadSalesByGeneric().then(aggregates => buildSalesAccordion(aggregates)).catch(err => console.error(err))
+}
+
+function showInvoiceTable() {
+    const salesWrapper = document.getElementById('salesTableWrapper')
+    const invoiceWrapper = document.getElementById('invoiceTableWrapper')
+    
+    if (salesWrapper) salesWrapper.style.display = 'none'
+    if (invoiceWrapper) invoiceWrapper.style.display = 'block'
+}
+
+/**
+ * Load sales report using invoices and invoice items (items count and totals)
+ */
+function loadSalesReport() {
+    fetch(`/sia/server/api/main/get_invoices.php`)
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('salesListTableBody')
+            if (!tbody) return
+
+            if (data.status === 'success' && data.data.length > 0) {
+                const invoices = data.data
+
+                // For each invoice, fetch details to get item counts (parallel requests)
+                const detailPromises = invoices.map(inv => {
+                    return fetch(`/sia/server/api/main/get_invoice_details.php?invoice_id=${inv.invoice_id}`)
+                        .then(r => r.json())
+                        .catch(err => {
+                            console.error('Error fetching details for invoice', inv.invoice_id, err)
+                            return null
+                        })
+                        .then(detail => ({ inv, detail }))
+                })
+
+                Promise.all(detailPromises).then(results => {
+                    tbody.innerHTML = ''
+                    
+                    results.forEach(({ inv, detail }) => {
+                        // Get items array from detail response
+                        let itemsCount = 0
+                        if (detail && detail.items && Array.isArray(detail.items)) {
+                            itemsCount = detail.items.length
+                        }
+                        
+                        const date = inv.date_created ? new Date(inv.date_created).toLocaleDateString() : '-'
+                        const row = document.createElement('tr')
+                        row.className = 'sales-row'
+                        row.dataset.invoiceId = inv.invoice_id
+                        row.style.cursor = 'pointer'
+                        row.innerHTML = `
+                            <td>${inv.invoice_id}</td>
+                            <td>${inv.invoice_number || '-'}</td>
+                            <td>${inv.patient_id || '-'}</td>
+                            <td>${date}</td>
+                            <td style="text-align:center">${itemsCount}</td>
+                            <td>₱${parseFloat(inv.total_amount || 0).toFixed(2)}</td>
+                            <td>${inv.payment_method || 'Cash'}</td>
+                        `
+                        row.addEventListener('click', () => {
+                            document.querySelectorAll('.sales-row').forEach(r => r.style.backgroundColor = '')
+                            row.style.backgroundColor = '#e8f4f8'
+                            // Open invoice view modal instead of chart modal
+                            openInvoiceModal(inv.invoice_id)
+                        })
+                        tbody.appendChild(row)
+                    })
+                })
+            } else {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem;">No sales found</td>
+                    </tr>
+                `
+            }
+        })
+        .catch(err => {
+            console.error('Error loading sales report:', err)
+            const tbody = document.getElementById('salesListTableBody')
+            if (tbody) tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem;">Error loading sales</td>
+                </tr>
+            `
+        })
+}
+
+/** Build accordion items and render charts from aggregated data */
+function buildSalesAccordion(aggregates) {
+    try {
+        const topNSelect = document.getElementById('topNSelect')
+        const chartTypeSelect = document.getElementById('chartTypeSelect')
+        const customSelect = document.getElementById('customGenericSelect')
+        const addGenericBtn = document.getElementById('addGenericBtn')
+
+        const topN = parseInt(topNSelect?.value || '10')
+        const chartType = chartTypeSelect?.value || 'bar'
+
+        // Prepare data
+        const arr = aggregates.slice() // copy
+        const byQtyDesc = arr.slice().sort((a,b) => b.quantity - a.quantity)
+        const byQtyAsc = arr.slice().sort((a,b) => a.quantity - b.quantity)
+        const byPrice = arr.slice().filter(d => d.quantity > 0).map(d => ({...d, avg: d.sales / d.quantity || 0}))
+        byPrice.sort((a,b) => b.avg - a.avg)
+
+        // Top sellers
+        const top = byQtyDesc.slice(0, topN)
+        renderChartToCanvas('chart_top', top.map(d=>d.name), top.map(d=>d.quantity), chartType, 'Quantity Sold')
+
+        // Least sellers
+        const least = byQtyAsc.slice(0, topN)
+        renderChartToCanvas('chart_least', least.map(d=>d.name), least.map(d=>d.quantity), chartType, 'Quantity Sold')
+
+        // Most expensive
+        const expensive = byPrice.slice(0, topN)
+        renderChartToCanvas('chart_expensive', expensive.map(d=>d.name), expensive.map(d=>parseFloat((d.avg||0).toFixed(2))), chartType, 'Avg Price (₱)')
+
+        // Populate custom select
+        if (customSelect) {
+            customSelect.innerHTML = ''
+            arr.forEach(item => {
+                const opt = document.createElement('option')
+                opt.value = item.name
+                opt.textContent = `${item.name} — ${item.quantity} pcs`;
+                customSelect.appendChild(opt)
+            })
+        }
+
+        // Custom chart: allow adding selected generics for comparison
+        const customSelected = []
+        function renderCustom() {
+            const sel = customSelected.slice()
+            if (sel.length === 0) {
+                // show placeholder
+                renderChartToCanvas('chart_custom', ['No selection'], [0], 'bar', 'No Data')
+                return
+            }
+            const items = sel.map(name => {
+                const found = arr.find(a => a.name === name)
+                return { name, qty: found ? found.quantity : 0 }
+            })
+            renderChartToCanvas('chart_custom', items.map(i=>i.name), items.map(i=>i.qty), chartType, 'Quantity')
+        }
+
+        if (addGenericBtn) {
+            addGenericBtn.onclick = (e) => {
+                const val = customSelect?.value
+                if (!val) return
+                if (!customSelected.includes(val)) customSelected.push(val)
+                renderCustom()
+            }
+        }
+
+        // wire controls to re-render
+        if (topNSelect) topNSelect.onchange = () => buildSalesAccordion(aggregates)
+        if (chartTypeSelect) chartTypeSelect.onchange = () => buildSalesAccordion(aggregates)
+
+        // accordion open/close wiring
+        document.querySelectorAll('.accordion__header').forEach(h => {
+            const item = h.parentElement
+            h.onclick = () => {
+                const isOpen = item.classList.contains('open')
+                document.querySelectorAll('.accordion__item').forEach(it => it.classList.remove('open'))
+                if (!isOpen) item.classList.add('open')
+            }
+        })
+
+    } catch (err) {
+        console.error('Error building accordion charts', err)
+    }
+}
+
+/**
  * Open invoice in centered modal view and render report
  */
 function openInvoiceModal(invoiceId) {
@@ -121,6 +358,147 @@ function openInvoiceModal(invoiceId) {
             console.error('Error opening invoice modal:', err)
         })
 }
+
+// Chart instances (to destroy when re-rendering)
+let _aggregateChart = null
+let _charts = {}
+
+/** Wait until Chart.js is available, then call callback. */
+function ensureChartReady(cb, attempts = 0) {
+    if (typeof Chart !== 'undefined') return cb()
+    if (attempts > 20) {
+        console.error('Chart.js not available')
+        return
+    }
+    setTimeout(() => ensureChartReady(cb, attempts + 1), 100)
+}
+
+/**
+ * Load all invoices and invoice items, aggregate sales by generic medicine name,
+ * and return a Promise that resolves to the aggregated array.
+ */
+function loadSalesByGeneric(topN = 50) {
+    return new Promise((resolve, reject) => {
+        fetch(`/sia/server/api/main/get_invoices.php`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data || data.status !== 'success' || !Array.isArray(data.data)) {
+                    console.warn('No invoices to aggregate')
+                    resolve([])
+                    return
+                }
+
+                const invoices = data.data
+                // Fetch details for each invoice in parallel
+                const detailPromises = invoices.map(inv =>
+                    fetch(`/sia/server/api/main/get_invoice_details.php?invoice_id=${inv.invoice_id}`)
+                        .then(r => r.json())
+                        .catch(err => { console.error('detail fetch error', err); return null })
+                        .then(detail => ({ inv, detail }))
+                )
+
+                Promise.all(detailPromises).then(results => {
+                    const map = new Map()
+
+                    results.forEach(({ inv, detail }) => {
+                        if (!detail || !Array.isArray(detail.items)) return
+                        const invoiceDate = inv.date_created ? new Date(inv.date_created) : null
+                        detail.items.forEach(it => {
+                            const key = (it.generic_name || it.medicine_name || it.medicine_id || 'Unknown').toString().trim().toLowerCase()
+                            if (!map.has(key)) map.set(key, {
+                                name: (it.generic_name || it.medicine_name || it.medicine_id || 'Unknown').toString(),
+                                quantity: 0,
+                                sales: 0,
+                                last_sold: invoiceDate
+                            })
+
+                            const entry = map.get(key)
+                            const qty = parseInt(it.quantity || 0) || 0
+                            const price = parseFloat(it.price || 0) || 0
+                            entry.quantity += qty
+                            entry.sales += price * qty
+                            if (invoiceDate && (!entry.last_sold || invoiceDate > entry.last_sold)) entry.last_sold = invoiceDate
+                        })
+                    })
+
+                    const arr = Array.from(map.values())
+                    // Sort by quantity desc by default
+                    arr.sort((a, b) => b.quantity - a.quantity)
+                    resolve(arr)
+                })
+            })
+            .catch(err => {
+                console.error('Error aggregating sales:', err)
+                resolve([])
+            })
+    })
+}
+
+/** Render a chart into a canvas id with animation */
+function renderChartToCanvas(canvasId, labels, dataset, chartType = 'bar', labelText = '') {
+    ensureChartReady(() => {
+        try {
+            const ctxEl = document.getElementById(canvasId)
+            if (!ctxEl) {
+                console.warn('Canvas not found:', canvasId)
+                return
+            }
+            
+            // destroy existing
+            if (_charts[canvasId]) { try { _charts[canvasId].destroy() } catch(e){}; _charts[canvasId] = null }
+
+            // Ensure canvas has proper dimensions
+            ctxEl.width = ctxEl.offsetWidth
+            ctxEl.height = 320
+
+            const config = {
+                type: chartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: labelText,
+                        data: dataset,
+                        backgroundColor: labels.map((_, i) => `rgba(${54 + (i*20)%200}, ${162 - (i*10)%120}, ${235 - (i*15)%200}, 0.75)`),
+                        borderColor: 'rgba(33,37,41,0.9)',
+                        borderWidth: 1,
+                        tension: 0.3,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 900, easing: 'easeOutQuart' },
+                    scales: { 
+                        y: { beginAtZero: true },
+                        x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 0 } }
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            }
+
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                try {
+                    _charts[canvasId] = new Chart(ctxEl.getContext('2d'), config)
+                } catch (e) {
+                    console.error('Chart creation error:', canvasId, e)
+                }
+            }, 50)
+        } catch (err) {
+            console.error('Error rendering chart', canvasId, err)
+        }
+    })
+}
+
+/* Chart modal per-row removed — aggregated chart now drives Sales view. */
+
+/* per-row chart rendering removed; retained aggregated chart via `renderAggregateChart`. */
+
+/* per-row chart PDF export removed. */
 
 function renderReportView(invoice, items) {
     const el = document.createElement('div')
@@ -430,17 +808,6 @@ function saveInlineChanges() {
  * Initialize download button functionality
  */
 function initializeReportDownload() {
-    // Edit button - opens modal
-    const editBtn = document.getElementById('editBtn')
-    if (editBtn) {
-        console.log('Edit button found')
-        editBtn.addEventListener('click', function(e) {
-            e.preventDefault()
-            e.stopPropagation()
-            openEditModal()
-        })
-    }
-    
     // Close modal button
     const closeEditModalBtn = document.getElementById('closeEditModalBtn')
     if (closeEditModalBtn) {
@@ -517,61 +884,6 @@ function initializeReportDownload() {
 }
 
 /**
- * Open edit modal with editable report
- */
-function openEditModal() {
-    const reportView = document.querySelector('.report__view')
-    if (!reportView) {
-        alert('No report to edit')
-        return
-    }
-    
-    // Clone the report view
-    const editableReport = reportView.cloneNode(true)
-    const editableReportContainer = document.getElementById('editableReportContainer')
-    
-    // Clear and populate container
-    editableReportContainer.innerHTML = ''
-    editableReportContainer.appendChild(editableReport)
-    
-    // Make content editable
-    makeReportEditable(editableReportContainer)
-    
-    // Show modal with dark overlay
-    const editModalContainer = document.getElementById('editModalContainer')
-    editModalContainer.classList.add('---show')
-}
-
-/**
- * Make report content editable
- */
-function makeReportEditable(container) {
-    // Make span elements editable
-    const spans = container.querySelectorAll('span[id^="rpt-"]')
-    spans.forEach(span => {
-        span.contentEditable = true
-        span.style.backgroundColor = '#fff9e6'
-        span.style.border = '1px solid #ffd700'
-        span.style.padding = '2px 4px'
-        span.style.borderRadius = '2px'
-        span.style.cursor = 'text'
-        span.style.minWidth = '2rem'
-        span.style.display = 'inline-block'
-    })
-    
-    // Make table cells in items table editable
-    const itemsTable = container.querySelector('#rpt-items-tbody')
-    if (itemsTable) {
-        const cells = itemsTable.querySelectorAll('td')
-        cells.forEach(cell => {
-            cell.contentEditable = true
-            cell.style.backgroundColor = '#fff9e6'
-            cell.style.cursor = 'text'
-        })
-    }
-}
-
-/**
  * Close edit modal
  */
 function closeEditModal() {
@@ -626,165 +938,170 @@ function downloadReportAsPDF() {
         return
     }
 
-    console.log('Starting report download...')
-
-    // Get ALL CSS styles from stylesheets (includes report.css)
-    let styles = ''
-    try {
-        Array.from(document.styleSheets).forEach(sheet => {
-            try {
-                Array.from(sheet.cssRules).forEach(rule => {
-                    styles += rule.cssText + '\n'
-                })
-            } catch (e) {
-                // Skip CORS-blocked stylesheets
-            }
-        })
-    } catch (e) {
-        console.warn('Some stylesheets could not be accessed')
-    }
+    console.log('Starting report download as PDF...')
     
-    // Save the original body HTML
-    const originalBody = document.body.innerHTML
-    const originalHead = document.head.innerHTML
-    
-    // Clone the report view - deep clone to get all content
+    // Clone the report view
     const reportClone = reportView.cloneNode(true)
     
-    // Log to verify content is being captured
-    console.log('Report content cloned:', reportClone.innerHTML.length, 'characters')
-    console.log('Invoice sections found:', reportClone.querySelectorAll('.report__section').length)
-    
-    // Create a wrapper div for the cloned content
-    const wrapper = document.createElement('div')
-    wrapper.appendChild(reportClone)
-    
-    // Replace body content with only the report
-    document.body.innerHTML = wrapper.innerHTML
-    
-    // Add ALL collected styles to the document head
-    const styleTag = document.createElement('style')
-    styleTag.textContent = `
-        ${styles}
+    // Create minimal HTML for printing
+    const printHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Report</title>
+    <style>
+        :root {
+            --color-brand: #0066cc;
+            --color-text: #1a1a1a;
+            --color-text-muted: #666666;
+            --color-surface: #f5f5f5;
+        }
         
-        /* Minimal print-specific adjustments only */
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
         
         body {
-            margin: 0;
-            padding: 0;
             background: white;
+            color: var(--color-text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
         }
         
         .report__view {
-            width: 100%;
-            height: auto;
-            margin: 0;
-            padding: 40px;
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            padding: 20mm;
+            background: white;
             box-shadow: none;
             border-radius: 0;
-            overflow: visible;
-            background: white;
         }
         
-        /* Ensure all sections are visible */
         .report__header {
-            display: block;
-            visibility: visible;
+            text-align: center;
             margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
             border-bottom: 2px solid var(--color-brand);
+            padding-bottom: 1.5rem;
+        }
+        
+        .report__header h2 {
+            margin: 0 0 0.5rem 0;
+            font-size: 24px;
+            color: var(--color-brand);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .report__header p {
+            margin: 0.5rem 0 0 0;
+            font-size: 12px;
+            color: var(--color-text-muted);
         }
         
         .report__section {
-            display: block;
-            visibility: visible;
             margin-bottom: 2rem;
         }
         
         .report__section h3,
         .report__section h4 {
-            display: block;
-            visibility: visible;
-            margin: 0 0 1.5rem 0;
-            font-size: 1.1rem;
+            margin: 0 0 1rem 0;
+            font-size: 13px;
             color: var(--color-brand);
             text-transform: uppercase;
             border-bottom: 2px solid var(--color-brand);
-            padding-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            letter-spacing: 1px;
         }
         
         .report__info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
         .report__info-item {
-            display: block;
-            font-size: 0.95rem;
+            font-size: 13px;
             line-height: 1.6;
+            padding: 0.5rem 0;
+        }
+        
+        .report__info-item strong {
+            color: var(--color-text);
+            font-weight: 600;
         }
         
         .report__detail-table {
-            display: table;
             width: 100%;
-            margin: 2rem 0;
             border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 12px;
         }
         
         .report__detail-table thead {
-            display: table-header-group;
             background-color: var(--color-brand);
+            color: white;
         }
         
-        .report__detail-table tbody {
-            display: table-row-group;
+        .report__detail-table th {
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid var(--color-brand);
         }
         
-        .report__detail-table tr {
-            display: table-row;
-        }
-        
-        .report__detail-table th,
         .report__detail-table td {
-            display: table-cell;
-            padding: 1rem;
+            padding: 10px;
             border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        
+        .report__detail-table tbody tr:nth-child(even) {
+            background-color: #fafafa;
         }
         
         .report__summary {
-            display: block;
             margin: 2rem 0;
             padding: 1.5rem;
             border: 2px solid var(--color-brand);
             border-radius: 4px;
-            background-color: #f5f5f5;
+            background-color: var(--color-surface);
         }
         
         .report__summary-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 1rem;
-            font-size: 1rem;
+            font-size: 13px;
+            padding: 0.5rem 0;
+        }
+        
+        .report__summary-row strong {
+            font-weight: 600;
+            color: var(--color-text);
         }
         
         .report__summary-row.--total {
             border-top: 2px solid var(--color-brand);
             padding-top: 1rem;
+            font-size: 14px;
             font-weight: bold;
             color: var(--color-brand);
         }
         
         .report__footer {
-            display: block;
             text-align: center;
             margin-top: 2rem;
             padding-top: 1.5rem;
             border-top: 1px solid #e0e0e0;
+            font-size: 12px;
+            color: var(--color-text-muted);
         }
         
         @page {
@@ -796,17 +1113,14 @@ function downloadReportAsPDF() {
             body {
                 margin: 0;
                 padding: 0;
-                background: white;
             }
             
             .report__view {
                 width: 100%;
                 height: auto;
                 margin: 0;
-                padding: 20px;
-                box-shadow: none;
-                border-radius: 0;
-                page-break-inside: avoid;
+                padding: 20mm;
+                page-break-after: always;
             }
             
             .report__section {
@@ -817,24 +1131,25 @@ function downloadReportAsPDF() {
                 page-break-inside: avoid;
             }
         }
+    </style>
+</head>
+<body>
+    ${reportClone.outerHTML}
+</body>
+</html>
     `
-    document.head.appendChild(styleTag)
     
-    // Trigger print dialog with longer delay to ensure rendering
-    setTimeout(function() {
-        console.log('Triggering print dialog')
-        window.print()
-        
-        // Restore original page after print dialog closes
-        setTimeout(function() {
-            console.log('Restoring original page')
-            document.body.innerHTML = originalBody
-            document.head.innerHTML = originalHead
-            
-            // Re-initialize the report download button after restoration
-            initializeReportDownload()
-        }, 1500)
-    }, 800)
+    // Open new window for printing
+    const printWindow = window.open('', '_blank', 'width=1000,height=800')
+    printWindow.document.write(printHTML)
+    printWindow.document.close()
     
-    console.log('Print dialog should appear now')
+    // Trigger print after content is loaded
+    printWindow.onload = () => {
+        setTimeout(() => {
+            printWindow.print()
+        }, 250)
+    }
+    
+    console.log('PDF print dialog opened')
 }

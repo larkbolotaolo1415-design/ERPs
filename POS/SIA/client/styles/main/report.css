@@ -316,3 +316,356 @@
     color: var(--color-text-muted);
 }
 
+/* Chart modal (A4) styles moved here from fragment to keep CSS centralized */
+.theme__modal--a4 {
+    width: 210mm;
+    height: 297mm;
+    max-width: 95vw;
+    max-height: 95vh;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow: hidden;
+}
+
+.theme__modal--a4 .theme__modal-header {
+    flex: 0 0 auto;
+}
+
+.theme__modal--a4 .theme__modal-action {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+/* Invoice View Modal - Optimized for browser screen and PDF */
+#viewModalContainer {
+    pointer-events: none;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+#viewModalContainer.---show {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+#viewModalContainer .theme__modal {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    gap: 0;
+    width: 95vw;
+    height: 95vh;
+    max-width: 1000px;
+    max-height: 90vh;
+    background-color: var(--color-background);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 0;
+    overflow: visible; /* allow inner scrolling elements to render */
+}
+
+#viewReportPane {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden; /* keep pane layout stable, inner container scrolls */
+    -webkit-overflow-scrolling: touch;
+    background-color: white;
+    position: relative;
+}
+
+#viewReportPane > button#closeViewModalBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: all 0.2s ease;
+}
+
+#viewReportPane > button#closeViewModalBtn:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#viewReportContainer {
+    flex: 1 1 auto;
+    height: 100%;
+    max-height: calc(90vh - 40px);
+    overflow: auto; /* ensure the report content can scroll */
+    padding: 12px; /* small padding so content doesn't touch edges */
+    scroll-behavior: smooth;
+}
+
+#viewReportContainer .report__view {
+    width: 100%;
+    height: auto;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 40px 30px;
+    box-shadow: none;
+    border-radius: 0;
+    background: white;
+    font-size: 0.95rem;
+    max-height: none; /* don't force tall fixed height inside modal */
+}
+
+#viewModalSide {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+
+    height: 100%;
+    padding: 12px 8px;
+    background-color: var(--color-surface);
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    overflow-y: auto;
+}
+
+#viewModalSide .theme__button {
+    width: 100%;
+    padding: 8px 6px;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+#viewModalSide .theme__button svg {
+    width: 18px;
+    height: 18px;
+}
+
+#viewModalSide .theme__button span {
+    display: block;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+#viewModalSide .theme__button.--primary {
+    background-color: var(--color-brand);
+    color: white;
+}
+
+#viewModalSide .theme__button.--primary:hover {
+    background-color: var(--color-brand-hover);
+}
+
+#viewModalSide .theme__button:not(.--primary) {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--color-text);
+}
+
+#viewModalSide .theme__button:not(.--primary):hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Edit Modal */
+#editModalContainer {
+    pointer-events: none;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+    z-index: 9998;
+}
+
+#editModalContainer.---show {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+#editModalContainer .theme__modal {
+    display: flex;
+    flex-direction: column;
+    width: 95vw;
+    height: 95vh;
+    max-width: 1000px;
+    max-height: 90vh;
+    background-color: var(--color-background);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
+}
+
+#editableReportContainer {
+    flex: 1;
+    overflow: auto;
+    padding: 12px;
+    background-color: white;
+}
+
+#editableReportContainer .report__view {
+    width: 100%;
+    height: auto;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 40px 30px;
+    box-shadow: none;
+    border-radius: 0;
+    background: white;
+}
+
+/* Print and PDF optimization */
+@media print {
+    #viewModalContainer,
+    #editModalContainer,
+    #viewModalSide,
+    #viewReportPane > button,
+    .theme__modal-action {
+        display: none !important;
+    }
+    
+    body {
+        background: white;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .report__view {
+        width: 100%;
+        max-width: 210mm;
+        height: auto;
+        margin: 0;
+        padding: 20mm;
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: always;
+    }
+    
+    @page {
+        size: A4;
+        margin: 10mm;
+    }
+}
+
+.chart__content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow: hidden;
+}
+
+.chart__content canvas {
+    width: 100% !important;
+    height: 100% !important; /* single chart fills container */
+    display: block;
+}
+
+/* Sales aggregate chart styling */
+.sales__aggregate {
+    background: transparent;
+}
+
+.sales__aggregate canvas {
+    width: 100%;
+    height: 320px;
+    max-height: 40vh;
+    display: block;
+}
+
+/* Make sales and invoice tables stretch wider; enable horizontal scrolling on wrapper */
+#salesTableWrapper, #invoiceTableWrapper {
+    overflow-x: auto;
+}
+
+#salesListTable, #invoiceListTable {
+    min-width: 1400px; /* allow wider tables so columns don't wrap */
+}
+
+/* Accordion styles for sales charts */
+.sales-accordion {
+    display: block;
+    margin-bottom: 1rem;
+}
+.accordion__controls {
+    display:flex;
+    gap:1rem;
+    align-items:center;
+    margin-bottom:0.75rem;
+}
+.accordion__list {
+    display:block;
+    border-radius:6px;
+}
+.accordion__item {
+    border: 1px solid rgba(0,0,0,0.08);
+    margin-bottom: 0.5rem;
+}
+.accordion__header {
+    width:100%;
+    text-align:left;
+    padding:0.75rem 1rem;
+    background: var(--color-surface);
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition: background 200ms ease;
+}
+.accordion__header:hover {
+    background: rgba(0,0,0,0.05);
+}
+.accordion__panel {
+    max-height:0;
+    transition: max-height 400ms ease-out, padding 400ms ease-out, opacity 300ms ease;
+    overflow: visible;
+    padding: 0 1rem;
+    opacity: 0;
+    pointer-events: none;
+}
+.accordion__item.open .accordion__panel {
+    max-height: 800px;
+    padding: 1rem 1rem 1.5rem 1rem;
+    opacity: 1;
+    pointer-events: auto;
+    overflow: visible;
+}
+.accordion__panel canvas {
+    width:100% !important;
+    height:320px !important;
+    display:block;
+    margin:0;
+    padding:0;
+}
+
+@media (max-width: 520px), (max-height: 600px) {
+    .theme__modal--a4 {
+        width: 96vw;
+        height: 86vh;
+    }
+}
+

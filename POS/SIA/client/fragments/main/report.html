@@ -6,46 +6,111 @@
 
       <!-- REPORT CONTENT -->
 
-      <div class="report__tab">
-            <div class="report__tab-item ---active">
+      <div class="configuration__tab">
+            <div id="salesTab" class="configuration__tab-item ---active">
                 <span> Sales Report </span>
             </div>
-            <div class="report__tab-item">
+            <div id="invoiceTab" class="configuration__tab-item">
                 <span> Invoice </span>
             </div>
-         
       </div>
 
       
 
-      <div class="report__content__flex">
-                
-                <table class="report__list-table">
-                    <thead>
-                        <tr>
-                            <th>Invoice ID</th>
-                            <th>Invoice Number</th>
-                            <th>Patient ID</th>
-                            <th>Walkin ID</th>
-                            <th>Employee ID </th>
-                            <th>Subtotal</th>
-                            <th>Discount Type</th>
-                            <th>Discount Amount</th>
-                            <th>Tax Amount</th>
-                            <th>Total Amount</th>
-                            <th>Payment Method</th>
-                            <th>Date Created</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="invoiceListTableBody">
-                        <tr>
-                            <td colspan="3" style="text-align: center; padding: 2rem;">Loading invoices...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+      <div class="configuration__container">
+        <div class="configuration__container-content">
+                <!-- Sales Table (hidden by default, shown when Sales tab active) -->
+                <div id="salesTableWrapper" style="display: none; width: 100%;">
+                    <!-- Sales accordion: each item contains a chart. Controls allow Top-N and chart type selection. -->
+                    <div id="salesAccordion" class="sales-accordion">
+                        <div class="accordion__controls">
+                            <label>Top N:
+                                <select id="topNSelect">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </label>
+                            <label>Chart Type:
+                                <select id="chartTypeSelect">
+                                    <option value="bar">Bar</option>
+                                    <option value="line">Line</option>
+                                    <option value="pie">Pie</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="accordion__list">
+                            <div class="accordion__item" data-key="top">
+                                <button class="accordion__header">Top Sellers <span class="accordion__meta"></span></button>
+                                <div class="accordion__panel">
+                                    <canvas id="chart_top" width="1200" height="320"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="accordion__item" data-key="least">
+                                <button class="accordion__header">Least Sellers <span class="accordion__meta"></span></button>
+                                <div class="accordion__panel">
+                                    <canvas id="chart_least" width="1200" height="320"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="accordion__item" data-key="expensive">
+                                <button class="accordion__header">Most Expensive (by avg price) <span class="accordion__meta"></span></button>
+                                <div class="accordion__panel">
+                                    <canvas id="chart_expensive" width="1200" height="320"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="accordion__item" data-key="custom">
+                                <button class="accordion__header">Custom Generic Comparison <span class="accordion__meta"></span></button>
+                                <div class="accordion__panel">
+                                    <div style="margin-bottom:0.5rem;display:flex;gap:0.5rem;align-items:center">
+                                        <label style="white-space:nowrap">Select Generic:</label>
+                                        <select id="customGenericSelect" style="min-width:220px"></select>
+                                        <button id="addGenericBtn" class="theme__button">Add</button>
+                                    </div>
+                                    <div id="customChartContainer">
+                                        <canvas id="chart_custom" width="1200" height="320"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Table (default visible) -->
+                <div id="invoiceTableWrapper" style="width: 100%;">
+                    <table id="invoiceListTable" class="container-content__table shop__content-table">
+                        <thead>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Invoice Number</th>
+                                <th>Patient ID</th>
+                                <th>Walkin ID</th>
+                                <th>Employee ID </th>
+                                <th>Subtotal</th>
+                                <th>Discount Type</th>
+                                <th>Discount Amount</th>
+                                <th>Tax Amount</th>
+                                <th>Total Amount</th>
+                                <th>Payment Method</th>
+                                <th>Date Created</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoiceListTableBody">
+                            <tr>
+                                <td class="table__empty" colspan="13">Loading invoices...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
         </div>
+      </div>
+
+                <!-- Chart.js CDN -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </section>
 
 <!-- EDIT MODAL -->

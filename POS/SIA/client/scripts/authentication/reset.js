@@ -42,7 +42,7 @@ export const renderResetForm = (router, speed = 300) => {
                 }
 
                 $.ajax({
-                    url: '/SIA/server/api/authentication/reset_password.php',
+                    url: '/ERPs/POS/SIA/server/api/authentication/reset_password.php',
                     method: 'POST',
                     data: { email, password: newPassword },
                     success: function(response) {

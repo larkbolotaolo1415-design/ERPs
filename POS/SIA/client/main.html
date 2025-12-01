@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="/sia/">
+    <base href="/ERPs/POS/SIA/">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://cdn.jsdelivr.net;">
 
     <title>Pharma Plus</title>
 
@@ -31,6 +32,9 @@
 
     <!-- ========== [ SCRIPTS ] ========== -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+    <!-- Chart.js (CSP updated above to allow cdn.jsdelivr.net) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="client/assets/js/prescription-api.js" defer></script>
     <script type="module" src="client/scripts/main.js"></script>
 </head>
 <body>
