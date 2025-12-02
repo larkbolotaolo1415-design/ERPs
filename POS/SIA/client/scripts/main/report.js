@@ -12,6 +12,7 @@ export const renderReport = (router, speed = 300) => {
                 initializeReportDownload()
                 initializeReportTabs()
                 loadInvoices()
+                showSalesTable()
             // ========== [ ... ] ========== //
         })
         router.fadeIn(speed)
@@ -805,6 +806,136 @@ function saveInlineChanges() {
 }
 
 /**
+ * Send invoice report via email
+ */
+function sendInvoiceReport() {
+    const reportView = document.querySelector('.report__view')
+    if (!reportView) {
+        alert('No report loaded to send')
+        return
+    }
+
+    // Get invoice details from report
+    const invoiceId = document.getElementById('rpt-invoice-id')?.textContent || 'unknown'
+    const invoiceNumber = document.getElementById('rpt-invoice-number')?.textContent || 'unknown'
+
+    // Prompt for recipient email
+    const email = prompt('Enter recipient email address:', '')
+    if (!email) return
+
+    // Validate email
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        alert('Invalid email address')
+        return
+    }
+
+    // Show loading
+    const btn = document.getElementById('viewSendBtn')
+    const originalText = btn ? btn.textContent : 'SEND'
+    if (btn) btn.textContent = 'Sending...'
+    if (btn) btn.disabled = true
+
+    // Get report HTML
+    const reportHtml = reportView.outerHTML
+
+    // Send via API
+    fetch('/ERPs/POS/SIA/server/api/main/send_report.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            report_type: 'invoice',
+            recipient_email: email,
+            report_html: reportHtml,
+            invoice_id: invoiceId,
+            invoice_number: invoiceNumber
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Invoice report sent successfully to ' + email)
+        } else {
+            alert('Error sending report: ' + (data.message || 'Unknown error'))
+        }
+    })
+    .catch(err => {
+        console.error('Error sending report:', err)
+        alert('Failed to send report: ' + err.message)
+    })
+    .finally(() => {
+        if (btn) {
+            btn.textContent = originalText
+            btn.disabled = false
+        }
+    })
+}
+
+/**
+ * Send sales report via email (with charts as A4 document)
+ */
+function sendSalesReport() {
+    const chartsContainer = document.getElementById('salesChartsContainer')
+    if (!chartsContainer) {
+        alert('No sales report available to send')
+        return
+    }
+
+    // Prompt for recipient email
+    const email = prompt('Enter recipient email address:', '')
+    if (!email) return
+
+    // Validate email
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        alert('Invalid email address')
+        return
+    }
+
+    // Show loading
+    const btn = document.getElementById('sendSalesReportBtn')
+    const originalText = btn ? btn.textContent : 'Send Report'
+    if (btn) btn.textContent = 'Sending...'
+    if (btn) btn.disabled = true
+
+    // Clone charts container for email
+    const reportHtml = `
+    <div style="padding: 2rem; background: white;">
+        <h2 style="text-align: center; color: #0066cc; margin-bottom: 2rem;">Sales Report</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 2rem;">Generated on: ${new Date().toLocaleString()}</p>
+        ${chartsContainer.innerHTML}
+    </div>
+    `
+
+    // Send via API
+    fetch('/ERPs/POS/SIA/server/api/main/send_report.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            report_type: 'sales',
+            recipient_email: email,
+            report_html: reportHtml
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Sales report sent successfully to ' + email)
+        } else {
+            alert('Error sending report: ' + (data.message || 'Unknown error'))
+        }
+    })
+    .catch(err => {
+        console.error('Error sending report:', err)
+        alert('Failed to send report: ' + err.message)
+    })
+    .finally(() => {
+        if (btn) {
+            btn.textContent = originalText
+            btn.disabled = false
+        }
+    })
+}
+
+/**
  * Initialize download button functionality
  */
 function initializeReportDownload() {
@@ -861,6 +992,26 @@ function initializeReportDownload() {
             e.preventDefault()
             e.stopPropagation()
             toggleEditMode()
+        })
+    }
+
+    // Send invoice report button
+    const viewSendBtn = document.getElementById('viewSendBtn')
+    if (viewSendBtn) {
+        viewSendBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            e.stopPropagation()
+            sendInvoiceReport()
+        })
+    }
+
+    // Send sales report button
+    const sendSalesReportBtn = document.getElementById('sendSalesReportBtn')
+    if (sendSalesReportBtn) {
+        sendSalesReportBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            e.stopPropagation()
+            sendSalesReport()
         })
     }
 
