@@ -20,6 +20,84 @@ export const renderReport = (router, speed = 300) => {
 }
 
 /**
+ * Save invoice view as PDF and upload to documents table
+ */
+function saveInvoiceDocument() {
+    const reportView = document.querySelector('.report__view')
+    if (!reportView) {
+        alert('No report loaded to save')
+        return
+    }
+
+    const invoiceId = document.getElementById('rpt-invoice-id')?.textContent || null
+    const invoiceNumber = document.getElementById('rpt-invoice-number')?.textContent || null
+
+    // Optional description
+    const description = prompt('Optional description for document (leave blank to skip):', '')
+
+    // Show loading state on button
+    const btn = document.getElementById('viewSendBtn')
+    const originalText = btn ? btn.textContent : 'SEND'
+    if (btn) { btn.textContent = 'Saving...'; btn.disabled = true }
+
+    // Build a simple printable HTML wrapper (use same styles as PDF download)
+    const wrapper = `
+    <!doctype html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Invoice ${invoiceNumber ?? ''}</title>
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; color: #222; }
+        .report__view { width: 210mm; min-height: 297mm; padding: 20mm; background: #fff; }
+        .report__header { text-align: center; margin-bottom: 1.5rem; border-bottom: 2px solid #0066cc; padding-bottom: 1rem }
+      </style>
+    </head>
+    <body>
+      ${reportView.outerHTML}
+    </body>
+    </html>
+    `
+
+    fetch('/ERPs/POS/SIA/server/api/main/save_invoice_document.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            invoice_id: invoiceId,
+            invoice_number: invoiceNumber,
+            report_html: wrapper,
+            description: description || null
+        })
+    })
+    // read raw text so we can log non-JSON responses (HTML warnings/errors)
+    .then(res => res.text())
+    .then(text => {
+        try {
+            const data = JSON.parse(text)
+            if (data.status === 'success') {
+                alert('Invoice saved to documents. ID: ' + (data.document_id || 'n/a'))
+            } else {
+                alert('Failed to save invoice: ' + (data.message || 'Unknown error'))
+                console.error('save_invoice_document response (JSON):', data)
+            }
+        } catch (err) {
+            // Non-JSON response (likely PHP warnings or HTML). Log full response for debugging.
+            console.error('Non-JSON response from save_invoice_document.php:', text)
+            // Show a concise alert to the user and instruct to check console/network.
+            alert('Error saving invoice: server returned invalid JSON. See console (F12) for the full server response.')
+        }
+    })
+    .catch(err => {
+        console.error('Error saving invoice document (network):', err)
+        alert('Error saving invoice: ' + err.message)
+    })
+    .finally(() => {
+        if (btn) { btn.textContent = originalText; btn.disabled = false }
+    })
+}
+
+/**
  * Load all invoices from database
  */
 function loadInvoices() {
@@ -1001,7 +1079,8 @@ function initializeReportDownload() {
         viewSendBtn.addEventListener('click', function(e) {
             e.preventDefault()
             e.stopPropagation()
-            sendInvoiceReport()
+            // Save invoice PDF to documents table
+            saveInvoiceDocument()
         })
     }
 
