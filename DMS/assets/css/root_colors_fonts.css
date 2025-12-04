@@ -1,0 +1,24 @@
+:root {
+    /* Primary Colors */
+    --trust-blue: #2563EB;  /* Main brand color | main buttons,highlights, charts */
+    --deep-navy:  #1E3A8A; /* Headers/Accents | navbars, sidebar*/
+    --white: #FFFFFF; /* Background */
+    
+    /* Secondary / Support Colors */
+    --sky-blue:  #93C5FD; /* Highlight backgrounds, hover */
+    --light-gray: #F5F6FA; /* Neutral backgrounds, tables */
+    --light-gray-2: #DCDDE1; /* Disabled */
+    --dark-gray: #2D3436; /* Texts */
+    --shadow-light: #2563eb26; /* Shadows */
+
+    /* Status Colors (Payroll/HR Clarity) */
+    --green-teal: #10B981 ; /* Success (Paid/Complete) */
+    --amber-yellow: #FBBF24; /* Warning (Pending) */
+    --red: #DC2626; /*  Error (Failed Transaction) */
+
+
+    /* Typography */
+    --font-headings: 'Poppins', bold sans-serif;
+    --font-body: 'Roboto', sans-serif;
+}
+

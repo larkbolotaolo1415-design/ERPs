@@ -1,0 +1,15 @@
+<IfModule mod_authz_core.c>
+  Options +Indexes
+  Require all granted
+
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Deny from all
+</IfModule>
+
+<FilesMatch "^$">
+  Require all denied
+</FilesMatch>
+
+
+
