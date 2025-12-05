@@ -119,16 +119,21 @@
         </label>
     </div>
 
-    <!-- Patient ID field -->
+    <!-- Patient Name Search field -->
     <div class="cart-action__id" id="patientField">
-        <span>Patient ID:</span>
-        <div class="theme__textfield --no-icon">
-            <input id="patientIdTextfield"
+        <span>Patient Name:</span>
+        <div class="theme__textfield --no-icon" style="position: relative;">
+            <input id="patientNameTextfield"
                    class="theme__textfield"
                    type="text"
-                   name="patient-id"
-                   placeholder="Enter Patient ID (PT-0000)">
+                   name="patient-name"
+                   placeholder="Type patient name to search..."
+                   autocomplete="off">
+            <div id="patientSearchDropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ccc; border-radius: 4px; max-height: 200px; overflow-y: auto; z-index: 1000; margin-top: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <!-- Patient suggestions will be inserted here -->
+            </div>
         </div>
+        <input type="hidden" id="patientIdTextfield" name="patient-id" value="">
     </div>
 
     <!-- Prescription selector in cart panel -->

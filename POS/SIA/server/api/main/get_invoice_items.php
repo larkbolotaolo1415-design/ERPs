@@ -29,11 +29,8 @@ if ($invoice['refunded'] == 1) {
 // Determine buyer
 $buyer_name = '';
 if ($invoice['patient_id']) {
-    $stmtBuyer = $connection->prepare("SELECT first_name, last_name FROM admitted_patients WHERE patient_id = ?");
-    $stmtBuyer->bind_param("s", $invoice['patient_id']);
-    $stmtBuyer->execute();
-    $res = $stmtBuyer->get_result()->fetch_assoc();
-    $buyer_name = $res['first_name'] . ' ' . $res['last_name'];
+    // Patient info is managed in PMS, use patient_id as identifier
+    $buyer_name = 'Patient ID: ' . $invoice['patient_id'];
 } elseif ($invoice['walkin_id']) {
     $stmtBuyer = $connection->prepare("SELECT first_name, last_name FROM walkin_customers WHERE walkin_id = ?");
     $stmtBuyer->bind_param("i", $invoice['walkin_id']);

@@ -1,39 +1,30 @@
-<!--
-COPY PASTE NYO LNG UNG IBA'T IBANG FORMAT NA KAILANGAN NYO SA SYSTEM
-THEN STYLE NYO NG SARILI NYO IF NALILIITAN OR NALALAKIHAN KAYO
-
-[ SYNTAX ================================================== ]
-
-kayo na po bahala mag lagay ng info
--->
-
 <div class="profile">
-    <!-- ================= PROFILE HEADER ================= -->
+
+    <!-- ================= PROFILE HEADER ================ -->
     <section class="profile__header">
-
         <div class="profile__header-image">
-            <img id="profilePhoto" src="" alt="User Icon" />
+            <img id="profilePicture" src="client/assets/images/default-user.webp" alt="User Icon" />
 
-            <button id="btnUploadPhoto" class="component__button --primary">
+            <button class="component__button --primary" id="uploadPhotoBtn">
                 <span>Upload Photo</span>
             </button>
         </div>
 
         <div class="profile__header-detail">
-            <h1 id="profileName">Loading...</h1>
+            <h1 id="profileFullname">Loading...</h1>
 
-            <p>Position: <span id="profilePosition">Loading...</span></p>
-            <p>Department: <span id="profileDepartment">Loading...</span></p>
+            <p>Position: <span id="profileSubRole">Loading...</span></p>
+            <p>Department: <span id="profileRole">Loading...</span></p>
             <p>Employment Status: <span id="profileStatus">Loading...</span></p>
             <p>Employee ID: <span id="profileEmployeeID">Loading...</span></p>
         </div>
-
     </section>
 
-    <!-- ================= PROFILE CARDS ================= -->
+
+    <!-- ================= PROFILE CARD ================ -->
     <section class="profile__card">
 
-        <!-- PERSONAL INFORMATION -->
+        <!-- ===== PERSONAL INFORMATION ===== -->
         <div class="profile__card-block">
             <h1>PERSONAL INFORMATION</h1>
 
@@ -41,35 +32,39 @@ kayo na po bahala mag lagay ng info
 
                 <div class="card-block__detail-block">
                     <span class="detail-block__header">CONTACT NUMBER</span>
-                    <span id="contactNumber" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profileContact">N/A</span>
+
                     <br />
 
                     <span class="detail-block__header">EMERGENCY CONTACT NUMBER</span>
-                    <span id="emergencyContact" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profileEmergency">N/A</span>
                 </div>
 
                 <div class="card-block__detail-block">
                     <span class="detail-block__header">DATE OF BIRTH</span>
-                    <span id="dateOfBirth" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profileBirthdate">N/A</span>
+
                     <br />
 
                     <span class="detail-block__header">GENDER</span>
-                    <span id="gender" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profileGender">N/A</span>
+
                     <br />
 
                     <span class="detail-block__header">EMAIL ADDRESS</span>
-                    <span id="emailAddress" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profileEmail">N/A</span>
                 </div>
 
                 <div class="card-block__detail-block">
                     <span class="detail-block__header">HOME ADDRESS</span>
-                    <span id="homeAddress" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profileAddress">N/A</span>
                 </div>
 
             </section>
         </div>
 
-        <!-- GOVERNMENT IDS -->
+
+        <!-- ===== GOVERNMENT IDs ===== -->
         <div class="profile__card-block">
             <h1>GOVERNMENT IDENTIFICATION NUMBERS</h1>
 
@@ -77,20 +72,27 @@ kayo na po bahala mag lagay ng info
 
                 <div class="card-block__detail-block">
                     <span class="detail-block__header">PAG-IBIG</span>
-                    <span id="pagibigNumber" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profilePagibig">N/A</span>
                 </div>
 
                 <div class="card-block__detail-block">
                     <span class="detail-block__header">PHILHEALTH</span>
-                    <span id="philhealthNumber" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profilePhilhealth">N/A</span>
                 </div>
 
                 <div class="card-block__detail-block">
                     <span class="detail-block__header">SSS</span>
-                    <span id="sssNumber" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profileSSS">N/A</span>
                 </div>
 
                 <div class="card-block__detail-block">
                     <span class="detail-block__header">TIN</span>
-                    <span id="tinNumber" class="detail-block__data">Loading...</span>
+                    <span class="detail-block__data" id="profileTIN">N/A</span>
                 </div>
+
+            </section>
+        </div>
+
+    </section>
+
+</div>

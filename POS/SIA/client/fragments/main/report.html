@@ -21,15 +21,6 @@
         <div class="configuration__container-content">
                 <!-- Sales Table (shown by default) -->
                 <div id="salesTableWrapper" style="display: block; width: 100%;">
-                    <!-- Send Report Button -->
-                    <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem; padding: 0 1rem;">
-                        <button id="sendSalesReportBtn" class="theme__button" style="background-color: #8b5cf6; color: white; display: flex; align-items: center; gap: 0.5rem;">
-                            <svg height="20" width="20">
-                                <use href="client/assets/icons/main.svg#icon-send"></use>
-                            </svg>
-                            <span>Send Report</span>
-                        </button>
-                    </div>
                     <!-- Sales accordion: each item contains a chart. Controls allow Top-N and chart type selection. -->
                     <div id="salesAccordion" class="sales-accordion">
                         <div class="accordion__controls">
@@ -155,30 +146,23 @@
                 
                 <!-- Rendered report view will be injected here -->
             </div>
+            
+            <!-- Buttons at Bottom -->
+            <div id="viewModalButtons" style="display: flex; gap: 1rem; justify-content: center; padding: 1.5rem; border-top: 1px solid #e0e0e0; margin-top: 2rem;">
+                <button id="viewDownloadBtn" class="theme__button --primary"> 
+                    <svg height="24" width="24">
+                        <use href="client/assets/icons/main.svg#icon-download"></use>
+                    </svg>
+                    <span>DOWNLOAD</span>
+                </button>
+
+                <button id="viewEditBtn" class="theme__button"> 
+                    <svg height="24" width="24">
+                        <use href="client/assets/icons/main.svg#icon-edit"></use>
+                    </svg>
+                    <span>EDIT</span>
+                </button>
+            </div>
         </div>
-
-        <!-- Side Panel with Buttons -->
-        <aside id="viewModalSide">
-            <button id="viewDownloadBtn" class="theme__button --primary"> 
-                <svg height="24" width="24">
-                    <use href="client/assets/icons/main.svg#icon-download"></use>
-                </svg>
-                <span>DOWNLOAD</span>
-            </button>
-
-            <button id="viewSendBtn" class="theme__button" style="background-color: #8b5cf6; color: white;"> 
-                <svg height="24" width="24">
-                    <use href="client/assets/icons/main.svg#icon-send"></use>
-                </svg>
-                <span>SEND</span>
-            </button>
-
-            <button id="viewEditBtn" class="theme__button"> 
-                <svg height="24" width="24">
-                    <use href="client/assets/icons/main.svg#icon-edit"></use>
-                </svg>
-                <span>EDIT</span>
-            </button>
-        </aside>
     </div>
 </div>

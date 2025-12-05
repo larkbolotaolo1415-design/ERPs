@@ -22,7 +22,7 @@ export const renderDashboard = (router, speed = 300) => {
                 .then(res => res.json())
                 .then(data => {
                     if (data.status === "success") {
-                        document.getElementById("medicineAvailableCount").textContent = data.total
+                        document.getElementById("medicineAvailableCount").textContent = Number(data.total || 0).toLocaleString()
                     }
                 })
 
@@ -30,8 +30,13 @@ export const renderDashboard = (router, speed = 300) => {
                 .then(res => res.json())
                 .then(data => {
                     if (data.status === "success") {
-                        const revenue = Number(data.revenue || 0).toFixed(2)
-                        document.getElementById("revenueAmount").textContent = `₱ ${revenue}`
+                        const revenue = Number(data.revenue || 0)
+                        // Format with commas and 2 decimal places
+                        const formattedRevenue = revenue.toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })
+                        document.getElementById("revenueAmount").textContent = `₱ ${formattedRevenue}`
                     }
                 })
 
@@ -69,7 +74,7 @@ export const renderDashboard = (router, speed = 300) => {
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
-            document.getElementById("totalMedicinesCount").textContent = data.total
+            document.getElementById("totalMedicinesCount").textContent = Number(data.total || 0).toLocaleString()
         }
     })
 
@@ -77,7 +82,7 @@ export const renderDashboard = (router, speed = 300) => {
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
-            document.getElementById("medicineGroupCount").textContent = data.groups_count
+            document.getElementById("medicineGroupCount").textContent = Number(data.groups_count || 0).toLocaleString()
         }
     })
 
@@ -85,7 +90,7 @@ fetch("server/api/main/get_invoice_count.php")
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
-            document.getElementById("invoiceGeneratedCount").textContent = data.invoice_count
+            document.getElementById("invoiceGeneratedCount").textContent = Number(data.invoice_count || 0).toLocaleString()
         }
     })
 
@@ -93,7 +98,7 @@ fetch("server/api/main/get_invoice_count.php")
     $.getJSON('server/api/main/get_customer_count.php', function(res) {
         if (res.status === 'success') {
             console.log('Customer count loaded:', res.total_customers);
-            $('#totalCustomersCount').text(res.total_customers); // updates the card
+            $('#totalCustomersCount').text(Number(res.total_customers || 0).toLocaleString()); // updates the card
         } else {
             console.error('Failed to load customer count:', res.message);
         }
@@ -120,7 +125,7 @@ fetch("server/api/main/get_most_frequent.php")
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
-            document.getElementById("employeeCount").textContent = data.total;
+            document.getElementById("employeeCount").textContent = Number(data.total || 0).toLocaleString();
         }
     })
     .catch(err => console.error("Error fetching employee count:", err));

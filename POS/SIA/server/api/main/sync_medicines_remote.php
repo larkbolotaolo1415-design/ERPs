@@ -1,11 +1,10 @@
 <?php
 header("Content-Type: application/json");
 
-require '../../core/connection.php'; // Your DB connection
+require '../../core/connection.php';
 
-$remoteUrl = 'http://26.161.108.142/INVENTORY_NEW/Inventory-System-New/php/get_medicines.php';
+$remoteUrl = 'http://26.161.108.142/Inventory-System-New-main/php/get_medicines.php';
 
-// Fetch remote JSON
 function fetch_remote($url) {
     if (function_exists('curl_version')) {
         $ch = curl_init($url);
@@ -28,7 +27,6 @@ function fetch_remote($url) {
     return ['ok'=>true,'body'=>$resp];
 }
 
-// Map remote JSON fields to your local table
 function map_remote_to_local($item) {
     return [
         'medicine_id'    => $item['id'] ?? null,
@@ -42,7 +40,6 @@ function map_remote_to_local($item) {
     ];
 }
 
-// Upsert function
 function upsert_item($conn, $data) {
     $stmt = $conn->prepare("SELECT medicine_id FROM medicines WHERE medicine_id = ? LIMIT 1");
     $stmt->bind_param('s', $data['medicine_id']);
@@ -52,7 +49,6 @@ function upsert_item($conn, $data) {
     $stmt->close();
 
     if ($existing) {
-        // UPDATE existing record
         $fields = [];
         $params = [];
         $types = '';
@@ -65,17 +61,17 @@ function upsert_item($conn, $data) {
         $params[] = $data['medicine_id'];
         $types .= 's';
 
-        $sql = "UPDATE medicines SET ".implode(', ',$fields)." WHERE medicine_id = ?";
+        $sql = "UPDATE medicines SET ".implode(', ', $fields)." WHERE medicine_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param($types, ...$params);
         $ok = $stmt->execute();
         $stmt->close();
         return $ok ? 'updated' : 'error';
+
     } else {
-        // INSERT new record
         $cols = array_keys($data);
-        $placeholders = implode(',', array_fill(0,count($cols),'?'));
-        $sql = "INSERT INTO medicines (`".implode('`,`',$cols)."`) VALUES ($placeholders)";
+        $placeholders = implode(',', array_fill(0, count($cols), '?'));
+        $sql = "INSERT INTO medicines (`".implode('`,`', $cols)."`) VALUES ($placeholders)";
         $stmt = $conn->prepare($sql);
         $types = '';
         $params = [];
@@ -90,31 +86,41 @@ function upsert_item($conn, $data) {
     }
 }
 
-// Main
 $report = ['processed'=>0,'inserted'=>0,'updated'=>0,'errors'=>[]];
 
 $f = fetch_remote($remoteUrl);
 if (!$f['ok']) {
     http_response_code(502);
-    echo json_encode(['status'=>'error','error'=>$f['error']]);
+    $errorMsg = $f['error'] ?? 'Unknown error';
+    // Provide more descriptive error messages
+    if (strpos($errorMsg, 'HTTP 502') !== false || strpos($errorMsg, '502') !== false) {
+        $errorMsg = 'Bad Gateway: Unable to connect to inventory system';
+    } elseif (strpos($errorMsg, 'timeout') !== false || strpos($errorMsg, 'TIMEOUT') !== false) {
+        $errorMsg = 'Connection timeout: Inventory system did not respond in time';
+    } elseif (strpos($errorMsg, 'Connection refused') !== false || strpos($errorMsg, 'refused') !== false) {
+        $errorMsg = 'Connection refused: Inventory system is not available';
+    }
+    echo json_encode(['status'=>'error','error'=>$errorMsg, 'message'=>'Failed to sync medicines from inventory system']);
     exit;
 }
 
 $decoded = json_decode($f['body'], true);
 if ($decoded === null) {
     http_response_code(502);
-    echo json_encode(['status'=>'error','error'=>'invalid_json']);
+    echo json_encode([
+        'status'=>'error',
+        'error'=>'Invalid response from inventory system',
+        'message'=>'The inventory system returned invalid data. Please contact support.'
+    ]);
     exit;
 }
 
-// Extract items from "data"
 $items = is_array($decoded['data'] ?? null) ? $decoded['data'] : [];
 if (empty($items)) {
     echo json_encode(['status'=>'warning','report'=>$report]);
     exit;
 }
 
-// Process each item
 foreach ($items as $item) {
     if (!is_array($item)) continue;
     $report['processed']++;
@@ -129,6 +135,23 @@ foreach ($items as $item) {
     if ($res === 'inserted') $report['inserted']++;
     elseif ($res === 'updated') $report['updated']++;
     else $report['errors'][] = $mapped['medicine_id'];
+}
+
+/* -------------------------------
+   REMOVE LOCAL ITEMS NOT IN REMOTE
+-------------------------------- */
+$remote_ids = array_map(fn($x) => $x['id'], $items);
+
+if (!empty($remote_ids)) {
+    $placeholders = implode(',', array_fill(0, count($remote_ids), '?'));
+    $sql = "DELETE FROM medicines WHERE medicine_id NOT IN ($placeholders)";
+    $stmt = $connection->prepare($sql);
+
+    $types = str_repeat('s', count($remote_ids));
+    $stmt->bind_param($types, ...$remote_ids);
+
+    $stmt->execute();
+    $stmt->close();
 }
 
 echo json_encode(['status'=>'success','report'=>$report]);

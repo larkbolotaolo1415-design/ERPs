@@ -423,6 +423,48 @@ function openInvoiceModal(invoiceId) {
                 container.innerHTML = ''
                 container.appendChild(renderReportView(invoice, items))
 
+                // Ensure buttons are visible at bottom
+                const viewModalButtons = document.getElementById('viewModalButtons')
+                if (viewModalButtons) {
+                    // Check if buttons exist, if not restore them
+                    const downloadBtn = document.getElementById('viewDownloadBtn')
+                    const editBtn = document.getElementById('viewEditBtn')
+                    if (!downloadBtn || !editBtn) {
+                        viewModalButtons.innerHTML = `
+                            <button id="viewDownloadBtn" class="theme__button --primary"> 
+                                <svg height="24" width="24">
+                                    <use href="client/assets/icons/main.svg#icon-download"></use>
+                                </svg>
+                                <span>DOWNLOAD</span>
+                            </button>
+
+                            <button id="viewEditBtn" class="theme__button"> 
+                                <svg height="24" width="24">
+                                    <use href="client/assets/icons/main.svg#icon-edit"></use>
+                                </svg>
+                                <span>EDIT</span>
+                            </button>
+                        `
+                        // Re-attach event listeners
+                        const newDownloadBtn = document.getElementById('viewDownloadBtn')
+                        const newEditBtn = document.getElementById('viewEditBtn')
+                        if (newDownloadBtn) {
+                            newDownloadBtn.addEventListener('click', function(e) {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                downloadReportAsPDF()
+                            })
+                        }
+                        if (newEditBtn) {
+                            newEditBtn.addEventListener('click', function(e) {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                toggleEditMode()
+                            })
+                        }
+                    }
+                }
+
                 // Show view modal
                 const viewModal = document.getElementById('viewModalContainer')
                 console.log('Modal container found:', !!viewModal)
@@ -675,18 +717,36 @@ function toggleEditMode() {
 function enableEditMode() {
     const viewReportPane = document.getElementById('viewReportPane')
     const viewEditBtn = document.getElementById('viewEditBtn')
-    const viewModalSide = document.getElementById('viewModalSide')
+    const viewModalButtons = document.getElementById('viewModalButtons')
     
-    if (!viewReportPane || !viewEditBtn || !viewModalSide) return
+    if (!viewReportPane || !viewEditBtn || !viewModalButtons) return
 
     // Add edit mode class
     viewReportPane.classList.add('edit-mode')
 
-    // Make content editable
+    // Make content editable (except protected fields)
+    const protectedFields = [
+        'rpt-invoice-id',
+        'rpt-invoice-number',
+        'rpt-invoice-date',
+        'rpt-payment-method',
+        'rpt-patient-id',
+        'rpt-employee-id'
+    ]
+    
     const spans = viewReportPane.querySelectorAll('span[id^="rpt-"]')
     spans.forEach(span => {
-        span.contentEditable = true
-        span.style.cursor = 'text'
+        const spanId = span.id
+        if (!protectedFields.includes(spanId)) {
+            span.contentEditable = true
+            span.style.cursor = 'text'
+        } else {
+            // Keep protected fields non-editable
+            span.contentEditable = false
+            span.style.cursor = 'default'
+            span.style.opacity = '0.7'
+            span.style.backgroundColor = '#f5f5f5'
+        }
     })
 
     const cells = viewReportPane.querySelectorAll('#rpt-items-tbody td')
@@ -695,16 +755,16 @@ function enableEditMode() {
         cell.style.cursor = 'text'
     })
 
-    // Replace buttons with Save/Cancel
-    viewModalSide.innerHTML = `
-        <button id="saveChangesBtn" class="theme__button --primary" style="width: 100%; padding: 0.8rem 0.6rem; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; border-radius: 8px; transition: all 0.3s ease; border: none; cursor: pointer; font-weight: 600; background-color: #10b981; color: white;">
+    // Replace buttons with Save/Cancel (horizontal layout at bottom)
+    viewModalButtons.innerHTML = `
+        <button id="saveChangesBtn" class="theme__button --primary" style="padding: 0.8rem 2rem; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; border-radius: 8px; transition: all 0.3s ease; border: none; cursor: pointer; font-weight: 600; background-color: #10b981; color: white;">
             <svg height="24" width="24" style="flex-shrink: 0;">
                 <use href="client/assets/icons/main.svg#icon-check"></use>
             </svg>
             <span>SAVE</span>
         </button>
         
-        <button id="cancelEditBtn" class="theme__button" style="width: 100%; padding: 0.8rem 0.6rem; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; border-radius: 8px; transition: all 0.3s ease; background-color: rgba(255, 255, 255, 0.2); color: white; border: none; cursor: pointer; font-weight: 600;">
+        <button id="cancelEditBtn" class="theme__button" style="padding: 0.8rem 2rem; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; border-radius: 8px; transition: all 0.3s ease; background-color: #6b7280; color: white; border: none; cursor: pointer; font-weight: 600;">
             <svg height="24" width="24" style="flex-shrink: 0;">
                 <use href="client/assets/icons/main.svg#icon-x"></use>
             </svg>
@@ -743,20 +803,36 @@ function disableEditMode() {
     const viewReportPane = document.getElementById('viewReportPane')
     const viewEditBtn = document.getElementById('viewEditBtn')
     const viewDownloadBtn = document.getElementById('viewDownloadBtn')
-    const viewModalSide = document.getElementById('viewModalSide')
+    const viewModalButtons = document.getElementById('viewModalButtons')
 
-    if (!viewReportPane || !viewModalSide) return
+    if (!viewReportPane || !viewModalButtons) return
 
     // Remove edit mode class
     viewReportPane.classList.remove('edit-mode')
 
     // Make content not editable
+    const protectedFields = [
+        'rpt-invoice-id',
+        'rpt-invoice-number',
+        'rpt-invoice-date',
+        'rpt-payment-method',
+        'rpt-patient-id',
+        'rpt-employee-id'
+    ]
+    
     const spans = viewReportPane.querySelectorAll('span[id^="rpt-"]')
     spans.forEach(span => {
         span.contentEditable = false
-        span.style.backgroundColor = ''
-        span.style.border = ''
-        span.style.padding = ''
+        const spanId = span.id
+        if (protectedFields.includes(spanId)) {
+            // Restore protected fields styling
+            span.style.opacity = ''
+            span.style.backgroundColor = ''
+        } else {
+            span.style.backgroundColor = ''
+            span.style.border = ''
+            span.style.padding = ''
+        }
         span.style.cursor = ''
     })
 
@@ -767,17 +843,17 @@ function disableEditMode() {
         cell.style.cursor = ''
     })
 
-    // Restore original buttons
-    viewModalSide.innerHTML = `
-        <button id="viewDownloadBtn" class="theme__button --primary" style="width: 100%; padding: 0.8rem 0.6rem; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; border-radius: 8px; transition: all 0.3s ease; border: none; cursor: pointer; font-weight: 600; background-color: rgba(255, 255, 255, 0.2); color: white;">
-            <svg height="24" width="24" style="flex-shrink: 0;">
+    // Restore original buttons (matching HTML structure - horizontal layout at bottom)
+    viewModalButtons.innerHTML = `
+        <button id="viewDownloadBtn" class="theme__button --primary"> 
+            <svg height="24" width="24">
                 <use href="client/assets/icons/main.svg#icon-download"></use>
             </svg>
             <span>DOWNLOAD</span>
         </button>
 
-        <button id="viewEditBtn" class="theme__button" style="width: 100%; padding: 0.8rem 0.6rem; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; border-radius: 8px; transition: all 0.3s ease; background-color: rgba(255, 255, 255, 0.2); color: white; border: none; cursor: pointer; font-weight: 600;">
-            <svg height="24" width="24" style="flex-shrink: 0;">
+        <button id="viewEditBtn" class="theme__button"> 
+            <svg height="24" width="24">
                 <use href="client/assets/icons/main.svg#icon-edit"></use>
             </svg>
             <span>EDIT</span>
@@ -813,7 +889,7 @@ function saveInlineChanges() {
     if (!viewReportPane) return
 
     try {
-        // Collect invoice data from editable fields
+        // Collect invoice data from editable fields (protected fields are read-only)
         const invoiceData = {
             invoice_id: document.getElementById('rpt-invoice-id')?.textContent || '',
             invoice_number: document.getElementById('rpt-invoice-number')?.textContent || '',
@@ -824,6 +900,7 @@ function saveInlineChanges() {
             tax_amount: document.getElementById('rpt-tax')?.textContent?.replace('₱', '').trim() || '0',
             total_amount: document.getElementById('rpt-total')?.textContent?.replace('₱', '').trim() || '0',
             payment_method: document.getElementById('rpt-payment-method')?.textContent || 'Cash'
+            // Note: invoice_id, invoice_number, patient_id, employee_id, payment_method are protected and won't be updated
         }
 
         // Collect items from table
@@ -847,7 +924,7 @@ function saveInlineChanges() {
         // Send to server
         console.log('Sending changes to server...', invoiceData)
 
-        fetch('/sia/server/api/main/update_invoice.php', {
+        fetch('/ERPs/POS/SIA/server/api/main/update_invoice.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1073,26 +1150,7 @@ function initializeReportDownload() {
         })
     }
 
-    // Send invoice report button
-    const viewSendBtn = document.getElementById('viewSendBtn')
-    if (viewSendBtn) {
-        viewSendBtn.addEventListener('click', function(e) {
-            e.preventDefault()
-            e.stopPropagation()
-            // Save invoice PDF to documents table
-            saveInvoiceDocument()
-        })
-    }
-
-    // Send sales report button
-    const sendSalesReportBtn = document.getElementById('sendSalesReportBtn')
-    if (sendSalesReportBtn) {
-        sendSalesReportBtn.addEventListener('click', function(e) {
-            e.preventDefault()
-            e.stopPropagation()
-            sendSalesReport()
-        })
-    }
+    // Send buttons removed
 
     const closeViewModalBtn = document.getElementById('closeViewModalBtn')
     if (closeViewModalBtn) {

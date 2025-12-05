@@ -7,20 +7,38 @@ $data = json_decode(file_get_contents('php://input'), true);
 $invoice_number = $data['invoice_number'] ?? '';
 $items = $data['items'] ?? [];
 $employee_id = $data['employee_id'] ?? '';
+$sub_role = $data['sub_role'] ?? '';
 
 if (!$invoice_number || empty($items) || !$employee_id) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid refund data']);
     exit;
 }
 
-// Check if employee is Admin
-$stmtRole = $connection->prepare("SELECT user_role FROM employees WHERE id = ?");
-$stmtRole->bind_param("i", $employee_id);
-$stmtRole->execute();
-$resRole = $stmtRole->get_result()->fetch_assoc();
+// Check if employee is Admin based on sub_role
+// Allow refund if sub_role contains "admin" (case-insensitive)
+$isAdmin = false;
+if (!empty($sub_role)) {
+    $subRoleLower = strtolower(trim($sub_role));
+    $isAdmin = strpos($subRoleLower, 'admin') !== false;
+}
 
-if (!$resRole || $resRole['user_role'] !== 'Admin') {
-    echo json_encode(['status' => 'error', 'message' => 'Only Admin can process refunds']);
+// Fallback: Check local employees table if sub_role not provided
+if (!$isAdmin) {
+    $stmtRole = $connection->prepare("SELECT user_role, sub_role FROM employees WHERE id = ?");
+    $stmtRole->bind_param("s", $employee_id);
+    $stmtRole->execute();
+    $resRole = $stmtRole->get_result()->fetch_assoc();
+    
+    if ($resRole) {
+        // Check sub_role first, then fallback to user_role
+        $checkRole = !empty($resRole['sub_role']) ? $resRole['sub_role'] : ($resRole['user_role'] ?? '');
+        $checkRoleLower = strtolower(trim($checkRole));
+        $isAdmin = strpos($checkRoleLower, 'admin') !== false || $checkRole === 'Admin';
+    }
+}
+
+if (!$isAdmin) {
+    echo json_encode(['status' => 'error', 'message' => 'Only Admin users can process refunds']);
     exit;
 }
 
@@ -47,9 +65,20 @@ try {
     }
 
     // Insert into refunds table
-    $stmtRefund = $connection->prepare("INSERT INTO refunds (invoice_number, employee_id, date_refunded) VALUES (?, ?, NOW())");
-    $stmtRefund->bind_param("si", $invoice_number, $employee_id);
-    $stmtRefund->execute();
+    // Note: employee_id is stored as string (HR system format like "EMP-041")
+    // The foreign key constraint fk_refund_employee should be removed from the database
+    // since we're using HR system employee IDs that don't exist in local employees table
+    try {
+        $stmtRefund = $connection->prepare("INSERT INTO refunds (invoice_number, employee_id, date_refunded) VALUES (?, ?, NOW())");
+        $stmtRefund->bind_param("ss", $invoice_number, $employee_id);
+        $stmtRefund->execute();
+    } catch (Exception $refundErr) {
+        // If foreign key constraint error, provide helpful message
+        if (strpos($refundErr->getMessage(), 'foreign key constraint') !== false) {
+            throw new Exception('Database constraint error: Please remove the foreign key constraint fk_refund_employee from the refunds table. See fix_refunds_foreign_key.sql for instructions.');
+        }
+        throw $refundErr;
+    }
 
     // Delete invoice items
     $stmtDeleteItems = $connection->prepare("DELETE FROM invoice_items WHERE invoice_number = ?");
@@ -57,8 +86,9 @@ try {
     $stmtDeleteItems->execute();
 
     // Mark invoice as refunded
+    // Note: refunded_by stores employee_id as string (HR system format)
     $stmtMark = $connection->prepare("UPDATE invoices SET refunded = 1, refunded_by = ?, date_refunded = NOW() WHERE invoice_number = ?");
-    $stmtMark->bind_param("is", $employee_id, $invoice_number);
+    $stmtMark->bind_param("ss", $employee_id, $invoice_number);
     $stmtMark->execute();
 
     $connection->commit();

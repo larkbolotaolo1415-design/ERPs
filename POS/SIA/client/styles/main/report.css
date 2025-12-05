@@ -361,9 +361,8 @@
 }
 
 #viewModalContainer .theme__modal {
-    display: grid;
-    grid-template-columns: 1fr 120px;
-    gap: 0;
+    display: flex;
+    flex-direction: column;
     width: 95vw;
     height: 95vh;
     max-width: 1000px;
@@ -372,7 +371,7 @@
     border-radius: 8px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     padding: 0;
-    overflow: visible; /* allow inner scrolling elements to render */
+    overflow: hidden; /* allow inner scrolling elements to render */
 }
 
 #viewReportPane {
@@ -409,11 +408,10 @@
 
 #viewReportContainer {
     flex: 1 1 auto;
-    height: 100%;
-    max-height: calc(90vh - 40px);
     overflow: auto; /* ensure the report content can scroll */
     padding: 12px; /* small padding so content doesn't touch edges */
     scroll-behavior: smooth;
+    min-height: 0; /* allow flexbox to shrink */
 }
 
 #viewReportContainer .report__view {
@@ -429,59 +427,48 @@
     max-height: none; /* don't force tall fixed height inside modal */
 }
 
-#viewModalSide {
+/* Side panel removed - buttons now at bottom */
+#viewModalButtons {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    gap: 1rem;
     justify-content: center;
-
-    height: 100%;
-    padding: 12px 8px;
-    background-color: var(--color-surface);
-    border-left: 1px solid rgba(0, 0, 0, 0.08);
-    overflow-y: auto;
+    padding: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    margin-top: auto;
+    background-color: var(--color-background);
+    flex-shrink: 0;
 }
 
-#viewModalSide .theme__button {
-    width: 100%;
-    padding: 8px 6px;
-    font-size: 11px;
+#viewModalButtons .theme__button {
+    padding: 0.8rem 2rem;
+    font-size: 0.9rem;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 4px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
-}
-
-#viewModalSide .theme__button svg {
-    width: 18px;
-    height: 18px;
-}
-
-#viewModalSide .theme__button span {
-    display: block;
+    gap: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
     font-weight: 600;
-    line-height: 1.2;
 }
 
-#viewModalSide .theme__button.--primary {
+#viewModalButtons .theme__button.--primary {
     background-color: var(--color-brand);
     color: white;
 }
 
-#viewModalSide .theme__button.--primary:hover {
+#viewModalButtons .theme__button.--primary:hover {
     background-color: var(--color-brand-hover);
+    opacity: 0.9;
 }
 
-#viewModalSide .theme__button:not(.--primary) {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: var(--color-text);
+#viewModalButtons .theme__button:not(.--primary) {
+    background-color: #6b7280;
+    color: white;
 }
 
-#viewModalSide .theme__button:not(.--primary):hover {
-    background-color: rgba(0, 0, 0, 0.1);
+#viewModalButtons .theme__button:not(.--primary):hover {
+    background-color: #4b5563;
 }
 
 /* Edit Modal */
@@ -540,7 +527,7 @@
 @media print {
     #viewModalContainer,
     #editModalContainer,
-    #viewModalSide,
+    #viewModalButtons,
     #viewReportPane > button,
     .theme__modal-action {
         display: none !important;
