@@ -1,4 +1,5 @@
 import { renderConfiguration } from './main/configuration.js'
+import { renderProfile } from './main/profile.js'
 import { renderDashboard } from './main/dashboard.js'
 import { renderShop } from './main/shop.js'
 import { renderReport } from './main/report.js'
@@ -22,6 +23,9 @@ else renderDashboard(router)
 // ========== [ SIDEBAR INITIALIZERS ] ========== //
 const configurationLink = $('#configurationLink')
 setupSidebarNavigationLink(configurationLink, renderConfiguration, router)
+
+const profileLink = $('#profileLink')
+setupSidebarNavigationLink(profileLink, renderProfile, router)
 
 const dashboardLink = $('#dashboardLink')
 setupSidebarNavigationLink(dashboardLink, renderDashboard, router)

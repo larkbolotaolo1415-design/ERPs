@@ -7,7 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://cdn.jsdelivr.net;">
 
-    <title>Pharma Plus</title>
+    <title>Blue Pulse</title>
+
+    <link rel="icon" type="image/x-icon" href="client/assets/images/logo.png">
 
     <!-- ========== [ STYLES ] ========== -->
     <link rel="stylesheet" href="client/styles/base.css">
@@ -23,6 +25,7 @@
     <link rel="stylesheet" href="client/styles/main/sidebar.css">
     <link rel="stylesheet" href="client/styles/main/header.css">
     <link rel="stylesheet" href="client/styles/main/configuration.css">
+    <link rel="stylesheet" href="client/styles/main/profile.css">
     <link rel="stylesheet" href="client/styles/main/dashboard.css">
     <link rel="stylesheet" href="client/styles/main/shop.css">
     <link rel="stylesheet" href="client/styles/main/refund.css">
@@ -42,7 +45,7 @@
     <aside class="sidebar">
         <section class="sidebar__header">
             <img src="client/assets/images/logo.png" alt="Company Logo">
-            <h3>Pharma Plus</h3>
+            <h3>Blue Pulse</h3>
         </section>
 
         <section class="sidebar__navigation">
@@ -63,6 +66,13 @@
             <div class="sidebar__navigation-divider">
                 <hr>
                 <span>COMMON</span>
+            </div>
+
+            <div id="profileLink" class="sidebar__navigation-item">
+                <svg height="28" width="28">
+                    <use href="client/assets/icons/main.svg#icon-employee"></use>
+                </svg>
+                <span>Profile</span>
             </div>
 
             <div id="dashboardLink" class="sidebar__navigation-item ---active">

@@ -69,7 +69,7 @@ if (!isset($connection) || !$connection) {
 }
 
 $mime = 'application/pdf';
-$insertSql = 'INSERT INTO documents (filename, mime_type, file_data, uploaded_by, upload_date, file_size, description) VALUES (?, ?, ?, ?, NOW(), ?, ?)';
+$insertSql = 'INSERT INTO documents (filename, mime_type, file_path, uploaded_by, upload_date, file_size, description) VALUES (?, ?, ?, ?, NOW(), ?, ?)';
 $stmt = $connection->prepare($insertSql);
 if (!$stmt) {
     echo json_encode(['status' => 'error', 'message' => 'Prepare failed: ' . $connection->error]);

@@ -24,7 +24,7 @@ try {
     if ($id) {
         // Fetch single document by id
         if ($includeBlob) {
-            $sql = 'SELECT id, filename, mime_type, file_data, uploaded_by, upload_date, file_size, description FROM documents WHERE id = ? LIMIT 1';
+            $sql = 'SELECT id, filename, mime_type, file_path, uploaded_by, upload_date, file_size, description FROM documents WHERE id = ? LIMIT 1';
         } else {
             $sql = 'SELECT id, filename, mime_type, uploaded_by, upload_date, file_size, description FROM documents WHERE id = ? LIMIT 1';
         }
@@ -41,8 +41,8 @@ try {
         }
 
         // If blob included, base64-encode to safely transport binary over JSON
-        if ($includeBlob && isset($row['file_data'])) {
-            $row['file_data'] = base64_encode($row['file_data']);
+        if ($includeBlob && isset($row['file_path'])) {
+            $row['file_path'] = base64_encode($row['file_path']);
         }
 
         // Cast numeric fields
@@ -68,6 +68,7 @@ try {
             'id' => (int)$row['id'],
             'filename' => $row['filename'],
             'mime_type' => $row['mime_type'],
+            'file_path' => $row['file_path'],
             'uploaded_by' => $row['uploaded_by'],
             'upload_date' => $row['upload_date'],
             'file_size' => isset($row['file_size']) ? (int)$row['file_size'] : null,
